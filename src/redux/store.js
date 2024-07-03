@@ -1,7 +1,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 import app from './features/appSlide';
-import { setupListeners } from '@reduxjs/toolkit/dist/query';
+// import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 export const store = configureStore({
     reducer: {
@@ -14,4 +14,4 @@ export const store = configureStore({
     }),*/
 });
 
-setupListeners(store.dispatch);
+// setupListeners(store.dispatch);
