@@ -11,7 +11,7 @@
         "start": "next start -p 3002"
     },
     "dependencies": {
-        "@reduxjs/toolkit": "^1.9.7",
+        "@reduxjs/toolkit": "^2.2.6",
         "@zeit/next-sass": "^1.0.1",
         "antd": "^5.15.2",
         "apexcharts": "^3.47.0",
