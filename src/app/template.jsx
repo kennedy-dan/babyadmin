@@ -12,16 +12,16 @@ export const metadata = {
 }
 
 export default function Template({ children }) {
-    useEffect(() => {
-        setTimeout(function() {
-            document.getElementById('__next').classList.add('loaded');
-        }, 100);
-    }, []);
+    // useEffect(() => {
+    //     setTimeout(function() {
+    //         document.getElementById('__next').classList.add('loaded');
+    //     }, 100);
+    // }, []);
 
     return (
-        <Providers>
+        <div>
             {children}
-        </Providers>
+        </div>
     );
 }
 

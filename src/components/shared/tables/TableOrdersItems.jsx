@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Menu } from 'antd';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { orderHistory } from '~/redux/features/productSlice';
 
 const TableOrdersItems = () => {
+    const dispatch = useDispatch()
+    const {getOrder} = useSelector(state => state.product)
+
+    useEffect(() => {
+        dispatch(orderHistory())
+    }, [])
+
+    const data = getOrder?.results?.data?.data?.data
     const orderItems = [
         {
             id: '#A580',
@@ -47,7 +57,7 @@ const TableOrdersItems = () => {
         },
     ];
 
-    const tableItemsView = orderItems.map((item) => {
+    const tableItemsView = data?.map((item) => {
         let badgeView, fullfillmentView;
         const menuView = (
             <Menu>
@@ -64,10 +74,10 @@ const TableOrdersItems = () => {
                 </Menu.Item>
             </Menu>
         );
-        if (item.payment) {
+        if (item?.payment?.status === 'Completed') {
             badgeView = <span className="ps-badge success">Paid</span>;
         } else {
-            badgeView = <span className="ps-badge gray">Unpaid</span>;
+            badgeView = <span className="ps-badge gray">{item?.payment?.status}</span>;
         }
         switch (item.fullfillment) {
             case 'In Progress':
@@ -87,22 +97,27 @@ const TableOrdersItems = () => {
                 break;
         }
         return (
-            <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>
+            <tr key={item?.id}>
+                <td>{item?.id}</td>
+                {/* <td>
                     <Link href="/orders/order-detail">
+                        {item?.items?.map(info =>
+                        <strong>{info?.product_name}, </strong>
 
-                        <strong>{item.product}</strong>
+                         )}
 
                     </Link>
-                </td>
+                </td> */}
                 <td>
-                    <strong> Aug 15, 2024</strong>
+                <Link href={`/orders/order-detail/${item?.id}`}>
+
+                    <strong>{item?.user?.first_name}</strong>
+                    </Link>
                 </td>
                 <td>{badgeView}</td>
-                <td>{fullfillmentView}</td>
+                {/* <td>{fullfillmentView}</td> */}
                 <td>
-                    <strong>{item.total}</strong>
+                    <strong>{item?.payment?.amount}</strong>
                 </td>
                 <td>
                     <DropdownAction />
@@ -116,10 +131,10 @@ const TableOrdersItems = () => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Date</th>
-                        <th>Product</th>
+                        <th>users name</th>
+
                         <th>Payment</th>
-                        <th>Fullfillment</th>
+                        {/* <th>Fullfillment</th> */}
                         <th>Total</th>
                         <th></th>
                     </tr>

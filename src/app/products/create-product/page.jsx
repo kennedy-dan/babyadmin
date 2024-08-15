@@ -1,11 +1,84 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { Select, ConfigProvider } from 'antd';
+import { getAdmincategories, AddProducts } from '~/redux/features/productSlice';
 
 const CreateProductPage = () => {
+    const dispatch = useDispatch();
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [cats, setCats] = useState(null);
+    const [price, setPrice] = useState(null);
+    const [stock, setInstock] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const { getadmincarts } = useSelector((state) => state.product);
+
+    const handleUpload = async () => {
+        try {
+          const response = await fetch(selectedImage);
+          const blob = await response.blob();
+          const file = new File([blob], 'image.png', { type: blob.type });
+            console.log(file)
+          return file
+          
+        } catch (error) {
+          console.error('Error converting URL to file:', error);
+        }
+      };
+
+    const handleSubmit = async () => {
+        let imagefile
+
+        imagefile = await handleUpload();
+        // const data = {
+        //     categoryid: cats,
+        //     price: price,
+        //     in_stock: stock,
+        //     description: description,
+        //     name: name,
+        //     image: imagefile,
+        // };
+        const data = new FormData();
+        data.append("category_id", cats);
+        data.append("price", price);
+        data.append("in_stock", stock);
+        data.append("description", description);
+        data.append("name", name);
+        data.append("image", imagefile);
+        dispatch(AddProducts(data))
+    };
+
+    
+
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                localStorage.setItem('uploadedImage', reader.result);
+                setSelectedImage(reader.result);
+                setSelectedFile(file);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    const data = getadmincarts?.results?.data;
+    const handleSelected = (e) => {
+        console.log(e);
+        setCats(e);
+    };
+
+    useEffect(() => {
+        dispatch(getAdmincategories());
+    }, []);
+    const triggerFileInput = () => {
+        document.getElementById('fileInput').click();
+    };
     return (
         <ContainerDefault title="Create new product">
             <HeaderDashboard
@@ -13,10 +86,10 @@ const CreateProductPage = () => {
                 description="Martfury Create New Product "
             />
             <section className="ps-new-item">
-                <form
+                <div
                     className="ps-form ps-form--new-product"
-                    action=""
-                    method="get">
+                    // action=""
+                >
                     <div className="ps-form__content">
                         <div className="row">
                             <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
@@ -31,18 +104,13 @@ const CreateProductPage = () => {
                                                 className="form-control"
                                                 type="text"
                                                 placeholder="Enter product name..."
+                                                value={name}
+                                                onChange={(e) =>
+                                                    setName(e.target.value)
+                                                }
                                             />
                                         </div>
-                                        <div className="form-group">
-                                            <label>
-                                                Reference<sup>*</sup>
-                                            </label>
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder="Enter product Reference..."
-                                            />
-                                        </div>
+
                                         <div className="form-group">
                                             <label>
                                                 Product Summary<sup>*</sup>
@@ -60,6 +128,10 @@ const CreateProductPage = () => {
                                                 className="form-control"
                                                 type="text"
                                                 placeholder=""
+                                                value={price}
+                                                onChange={(e) =>
+                                                    setPrice(e.target.value)
+                                                }
                                             />
                                         </div>
                                         <div className="form-group">
@@ -80,18 +152,13 @@ const CreateProductPage = () => {
                                                 className="form-control"
                                                 type="text"
                                                 placeholder=""
+                                                value={stock}
+                                                onChange={(e) =>
+                                                    setInstock(e.target.value)
+                                                }
                                             />
                                         </div>
-                                        <div className="form-group">
-                                            <label>
-                                                Sold Items<sup>*</sup>
-                                            </label>
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder=""
-                                            />
-                                        </div>
+
                                         <div className="form-group">
                                             <label>
                                                 Product Description<sup>*</sup>
@@ -99,7 +166,13 @@ const CreateProductPage = () => {
                                             <textarea
                                                 className="form-control"
                                                 rows="6"
-                                                name="editordata"></textarea>
+                                                value={description}
+                                                onChange={(e) =>
+                                                    setDescription(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                ></textarea>
                                         </div>
                                     </div>
                                 </figure>
@@ -109,40 +182,64 @@ const CreateProductPage = () => {
                                     <figcaption>Product Images</figcaption>
                                     <div className="ps-block__content">
                                         <div className="form-group">
-                                            <label>Product Thumbnail</label>
-                                            <div className="form-group--nest">
-                                                <input
-                                                    className="form-control mb-1"
-                                                    type="text"
-                                                    placeholder=""
-                                                />
-                                                <button className="ps-btn ps-btn--sm">
-                                                    Choose
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
                                             <label>Product Gallery</label>
                                             <div className="form-group--nest">
                                                 <input
                                                     className="form-control mb-1"
-                                                    type="text"
-                                                    placeholder=""
+                                                    id="fileInput"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleImageUpload}
                                                 />
-                                                <button className="ps-btn ps-btn--sm">
+                                                <button
+                                                    onClick={triggerFileInput}
+                                                    className="ps-btn ps-btn--sm">
                                                     Choose
                                                 </button>
                                             </div>
                                         </div>
                                         <div className="form-group form-group--nest">
-                                            <input
-                                                className="form-control mb-1"
-                                                type="text"
-                                                placeholder=""
-                                            />
-                                            <button className="ps-btn ps-btn--sm">
-                                                Choose
-                                            </button>
+                                            <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Select: {
+                                                            optionSelectedFontWeight: 600,
+                                                        },
+                                                    },
+                                                    // ...customTheme,
+                                                    token: {
+                                                        borderRadius: 0,
+                                                        controlHeight: 60,
+                                                        colorBgContainer:
+                                                            '#f0f0f0',
+                                                        fontSize: 16,
+                                                        // optionSelectedFontWeight: 300
+                                                    },
+                                                }}>
+                                                <Select
+                                                    // styles={customSelectStyles}
+                                                    id="country"
+                                                    placeholder="Country "
+                                                    showSearch
+                                                    className={` w-full `}
+                                                    // className=" "
+                                                    options={data?.map(
+                                                        (country) => ({
+                                                            value: country?.id,
+                                                            label: country?.name,
+                                                        })
+                                                    )}
+                                                    onChange={(e) =>
+                                                        handleSelected(e)
+                                                    }
+                                                    required={true}
+                                                    isClearable
+                                                    style={{
+                                                        backgroundColor: 'red',
+                                                    }}
+                                                />
+                                            </ConfigProvider>
                                         </div>
                                         <div className="form-group">
                                             <label>Video (optional)</label>
@@ -233,9 +330,9 @@ const CreateProductPage = () => {
                             Back
                         </a>
                         <button className="ps-btn ps-btn--gray">Cancel</button>
-                        <button className="ps-btn">Submit</button>
+                        <button onClick={handleSubmit} className="ps-btn">Submit</button>
                     </div>
-                </form>
+                </div>
             </section>
         </ContainerDefault>
     );

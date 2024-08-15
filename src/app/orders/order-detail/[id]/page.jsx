@@ -1,11 +1,29 @@
 'use client';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import ModuleOrderShippingInformation from '~/components/partials/orders/ModuleOrderShippingInformation';
 import ModuleOrderBillingInformation from '~/components/partials/orders/ModuleOrderBillingInformation';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'next/navigation';
+import { orderHistoryId } from '~/redux/features/productSlice';
 
 const OrderDetailPage = () => {
+    const dispatch = useDispatch()
+    const params = useParams();
+    const {getOrderid} = useSelector(state => state.product)
+
+
+    const { id } = params;
+
+    useEffect(() => {
+        dispatch(orderHistoryId(id));
+    }, [id]);
+
+    const det = getOrderid?.results?.data?.items
+
+    console.log(det)
+
     return (
         <ContainerDefault title="Order Detail">
             <HeaderDashboard
@@ -16,18 +34,18 @@ const OrderDetailPage = () => {
                 <div className="ps-section__left">
                     <div className="row">
                         <div className="col-md-4">
-                            <ModuleOrderShippingInformation />
+                            <ModuleOrderShippingInformation data={getOrderid} />
                         </div>
                         <div className="col-md-4">
-                            <ModuleOrderBillingInformation />
+                            <ModuleOrderBillingInformation data={getOrderid}  />
                         </div>
-                        <div className="col-md-4">
-                            <ModuleOrderShippingInformation />
-                        </div>
+                        {/* <div className="col-md-4">
+                            <ModuleOrderShippingInformation data={getOrderid}  />
+                        </div> */}
                     </div>
                     <div className="ps-card ps-card--track-order">
                         <div className="ps-card__header">
-                            <h4>#ABD-235711</h4>
+                            <h4>{getOrderid?.results?.data?.reference}</h4>
                         </div>
                         <div className="ps-card__content">
                             <div className="table-responsive">
@@ -41,48 +59,30 @@ const OrderDetailPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                    {det?.map(item =>   <tr>
                                             <td>
                                                 <a href="#">
-                                                    Herschel Leather Duffle Bag
-                                                    In Brown Color
+                                                 {item?.product_name}
                                                 </a>
                                             </td>
-                                            <td>1</td>
-                                            <td>$29.59</td>
-                                            <td>$29.59</td>
-                                        </tr>
-                                        <tr>
                                             <td>
-                                                <a href="#">
-                                                    Herschel Leather Duffle Bag
-                                                    In Brown Color
-                                                </a>
+                                            {item?.quantity}
+
                                             </td>
-                                            <td>1</td>
-                                            <td>$29.59</td>
-                                            <td>$29.59</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a href="#">
-                                                    Herschel Leather Duffle Bag
-                                                    In Brown Color
-                                                </a>
-                                            </td>
-                                            <td>1</td>
-                                            <td>$29.59</td>
-                                            <td>$29.59</td>
-                                        </tr>
+                                            <td>{item?.unit_price}</td>
+                                            <td>{item?.unit_price}</td>
+                                        </tr>)}
+
+                                      
                                         <tr>
                                             <td colSpan="3">
                                                 <strong>Sub Total:</strong>
                                             </td>
                                             <td>
-                                                <strong>$199.90</strong>
+                                                <strong>{getOrderid?.results?.data?.payment?.amount}</strong>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                             <td colSpan="3">
                                                 <strong>
                                                     Shipping Charge:
@@ -91,21 +91,21 @@ const OrderDetailPage = () => {
                                             <td>
                                                 <strong>$24.00</strong>
                                             </td>
-                                        </tr>
-                                        <tr>
+                                        </tr> */}
+                                        {/* <tr>
                                             <td colSpan="3">
                                                 <strong>Estimated:</strong>
                                             </td>
                                             <td>
                                                 <strong>$12.00</strong>
                                             </td>
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                             <td colSpan="3">
                                                 <strong>Total:</strong>
                                             </td>
                                             <td>
-                                                <strong>$211.00</strong>
+                                                <strong>{getOrderid?.results?.data?.payment?.amount}</strong>
                                             </td>
                                         </tr>
                                     </tbody>

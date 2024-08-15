@@ -1,7 +1,7 @@
 import React from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
 
-const TableProjectItems = () => {
+const TableProjectItems = ({data}) => {
     const productItems = [
         {
             name: 'Herschel Leather Duffle Bag In Brown Color',
@@ -94,7 +94,7 @@ const TableProjectItems = () => {
             ],
         },
     ];
-    const tableItems = productItems.map((item, index) => {
+    const tableItems = data?.map((item, index) => {
         let badgeView;
         if (item.stock) {
             badgeView = <span className="ps-badge success">Stock</span>;
@@ -106,21 +106,19 @@ const TableProjectItems = () => {
                 <td>{index + 1}</td>
                 <td>
                     <a href="#">
-                        <strong>{item.name}</strong>
+                        <strong>{item?.name}</strong>
                     </a>
                 </td>
                 <td>{item.sku}</td>
-                <td>{badgeView}</td>
+                <td>{item?.in_stock}</td>
                 <td>
-                    <strong>{item.price}</strong>
+                    <strong>{item?.price}</strong>
                 </td>
                 <td>
                     <p className="ps-item-categories">
-                        {item.categories.map((cat) => (
-                            <a href="#" key={cat.name}>
-                                {cat.name}
+                            <a >
+                                {item?.category?.name}
                             </a>
-                        ))}
                     </p>
                 </td>
                 <td>{item.date}</td>

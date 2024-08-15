@@ -1,14 +1,42 @@
 'use client';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import Pagination from '~/components/elements/basic/Pagination';
 import TableProjectItems from '~/components/shared/tables/TableProjectItems';
-import { Select } from 'antd';
+import { Select, Modal } from 'antd';
 import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAdminProducts } from '~/redux/features/productSlice';
 
 const { Option } = Select;
 const ProductPage = () => {
+    const dispatch = useDispatch()
+    const [openTrack, setOpenTrack] = useState(false);
+
+
+
+    const{allproducts} = useSelector(state => state.product)
+
+    useEffect(() => {
+      
+        dispatch(getAdminProducts())
+     
+    }, [])
+
+    
+  const handleTrackClose = () => {
+    setOpenTrack(false);
+  };
+
+    const handleTrackOpen = () => {
+        setOpenTrack(true);
+        console.log('yeaaah')
+        // dispatch(getSingleProduct(id));
+      };
+
+    const data = allproducts?.results?.data?.data?.data
+    
 
     return (
         <ContainerDefault title="Products">
@@ -17,10 +45,15 @@ const ProductPage = () => {
                 description="Martfury Product Listing "
             />
             <section className="ps-items-listing">
-                <div className="ps-section__actions">
+            <div className="ps-section__actions">
                     <Link href="/products/create-product" className="ps-btn success">
                         <i className="icon icon-plus mr-2" />New Product
                     </Link>
+                </div>
+                <div className="ps-section__actions">
+                    <button onClick={handleTrackOpen} className="ps-btn success">
+                        <i className="icon icon-plus mr-2" />Add Coupon
+                    </button>
                 </div>
                 <div className="ps-section__header">
                     <div className="ps-section__filter">
@@ -92,13 +125,25 @@ const ProductPage = () => {
                     </div>
                 </div>
                 <div className="ps-section__content">
-                    <TableProjectItems />
+                    <TableProjectItems data={data} />
                 </div>
                 <div className="ps-section__footer">
                     <p>Show 10 in 30 items.</p>
                     <Pagination />
                 </div>
+                <Modal
+        width={800}
+        style={{ height: "", width: "600px" }}
+        open={openTrack}
+        onCancel={handleTrackClose}
+        footer={false}
+      >
+
+       
+      
+      </Modal>
             </section>
+     
         </ContainerDefault>
     );
 };
