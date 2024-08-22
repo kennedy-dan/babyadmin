@@ -93,6 +93,18 @@ export const addAdmincategories = createAsyncThunk(
         return response.data;
     }
 );
+
+export const updateAdminCats = createAsyncThunk(
+    'admin/updateAdminCats',
+    async (data) => {
+        const response = await axios.post(`admin/product-categories/update/${data.id}`, data.data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    }
+);
 export const getSingleCats = createAsyncThunk(
     `customer/getSingleCats`,
     async (id) => {
@@ -141,10 +153,42 @@ export const getStores = createAsyncThunk(`customer/getStores`, async (id) => {
     return response;
 });
 
-export const topSell = createAsyncThunk(`customer/topSell`, async (id) => {
-    const response = await axios.get(`products/top-selling`);
-    return response;
+export const AddCoupons = createAsyncThunk(
+    `customer/AddCoupons`,
+    async (data) => {
+        const response = await axios.post('admin/coupons/store', data);
+        return response;
+    }
+);
+
+export const AddAds = createAsyncThunk(
+    `customer/AddAds`,
+    async (data) => {
+        console.log(data)
+        const response = await axios.post('admin/cms/sections', data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+    });
+        return response;
+    }
+);
+
+
+export const getAdsPages = createAsyncThunk(`customer/getAdsPages`, async (id) => {
+    const response = await axios.get(`admin/cms/pages`);
+    return response.data;
 });
+
+
+
+export const AddPgs = createAsyncThunk(
+    `customer/AddPgs`,
+    async (data) => {
+        const response = await axios.post('admin/cms/pages', data);
+        return response;
+    }
+);
 
 export const favAction = createAsyncThunk(
     `customer/favAction`,
@@ -211,6 +255,22 @@ export const getCategoriesWithProducts = createAsyncThunk(
 // 	}
 // );
 
+export const createLP = createAsyncThunk(
+    `customer/createLP`,
+    async (data) => {
+        const response = await axios.post('admin/loyalty-settings', data);
+        return response;
+    }
+);
+
+export const getLP = createAsyncThunk(
+    `customer/getLP`,
+    async (data) => {
+        const response = await axios.get('admin/loyalty-settings');
+        return response;
+    }
+);
+
 const initialState = {
     getadmincarts: {
         results: null,
@@ -218,6 +278,34 @@ const initialState = {
     },
 
     addcats: {
+        results: null,
+        isLoading: false,
+    },
+    updatecats: {
+        results: null,
+        isLoading: false,
+    },
+    addcoupon: {
+        results: null,
+        isLoading: false,
+    },
+    createlp: {
+        results: null,
+        isLoading: false,
+    },
+    getlp: {
+        results: null,
+        isLoading: true,
+    },
+    addadds: {
+        results: null,
+        isLoading: false,
+    },
+    getadspage: {
+        results: null,
+        isLoading: false,
+    },
+    addpage: {
         results: null,
         isLoading: false,
     },
@@ -337,6 +425,18 @@ export const productSlice = createSlice({
             .addCase(addAdmincategories.rejected, (state) => {
                 state.addcats.isLoading = true;
             });
+
+            builder
+            .addCase(updateAdminCats.pending, (state) => {
+                state.updatecats.isLoading = true;
+            })
+            .addCase(updateAdminCats.fulfilled, (state, { payload }) => {
+                state.updatecats.isLoading = false;
+                state.updatecats.results = payload;
+            })
+            .addCase(updateAdminCats.rejected, (state) => {
+                state.updatecats.isLoading = true;
+            });
         builder
             .addCase(getAdminProducts.pending, (state) => {
                 state.allproducts.isLoading = true;
@@ -392,6 +492,18 @@ export const productSlice = createSlice({
             })
             .addCase(getcartData.rejected, (state) => {
                 state.getcart.isLoading = true;
+            });
+
+                    builder
+            .addCase(getAdsPages.pending, (state) => {
+                state.getadspage.isLoading = true;
+            })
+            .addCase(getAdsPages.fulfilled, (state, { payload }) => {
+                state.getadspage.isLoading = false;
+                state.getadspage.results = payload;
+            })
+            .addCase(getAdsPages.rejected, (state) => {
+                state.getadspage.isLoading = true;
             });
 
         //remove to cart
@@ -483,29 +595,68 @@ export const productSlice = createSlice({
                 state.getOrderid.isLoading = true;
             });
 
-        builder
-            .addCase(getStores.pending, (state) => {
-                state.getstore.isLoading = true;
+            builder
+            .addCase(AddCoupons.pending, (state) => {
+                state.addcoupon.isLoading = true;
             })
-            .addCase(getStores.fulfilled, (state, { payload }) => {
-                state.getstore.isLoading = false;
-                state.getstore.results = payload;
+            .addCase(AddCoupons.fulfilled, (state, { payload }) => {
+                state.addcoupon.isLoading = false;
+                state.addcoupon.results = payload;
             })
-            .addCase(getStores.rejected, (state, { payload }) => {
-                state.getstore.isLoading = true;
+            .addCase(AddCoupons.rejected, (state) => {
+                state.addcoupon.isLoading = true;
             });
 
-        builder
-            .addCase(topSell.pending, (state) => {
-                state.topsell.isLoading = true;
+            builder
+            .addCase(AddAds.pending, (state) => {
+                state.addadds.isLoading = true;
             })
-            .addCase(topSell.fulfilled, (state, { payload }) => {
-                state.topsell.isLoading = false;
-                state.topsell.results = payload;
+            .addCase(AddAds.fulfilled, (state, { payload }) => {
+                state.addadds.isLoading = false;
+                state.addadds.results = payload;
             })
-            .addCase(topSell.rejected, (state, { payload }) => {
-                state.topsell.isLoading = true;
+            .addCase(AddAds.rejected, (state) => {
+                state.addadds.isLoading = true;
             });
+
+
+            builder
+            .addCase(createLP.pending, (state) => {
+                state.createlp.isLoading = true;
+            })
+            .addCase(createLP.fulfilled, (state, { payload }) => {
+                state.createlp.isLoading = false;
+                state.createlp.results = payload;
+            })
+            .addCase(createLP.rejected, (state) => {
+                state.createlp.isLoading = true;
+            });
+
+            builder
+            .addCase(getLP.pending, (state) => {
+                state.getlp.isLoading = true;
+            })
+            .addCase(getLP.fulfilled, (state, { payload }) => {
+                state.getlp.isLoading = false;
+                state.getlp.results = payload;
+            })
+            .addCase(getLP.rejected, (state) => {
+                state.getlp.isLoading = true;
+            });
+            
+            builder
+            .addCase(AddPgs.pending, (state) => {
+                state.addpage.isLoading = true;
+            })
+            .addCase(AddPgs.fulfilled, (state, { payload }) => {
+                state.addpage.isLoading = false;
+                state.addpage.results = payload;
+            })
+            .addCase(AddPgs.rejected, (state) => {
+                state.addpage.isLoading = true;
+            });
+
+  
 
         builder
             .addCase(favAction.pending, (state) => {

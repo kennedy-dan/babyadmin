@@ -35,6 +35,11 @@ const MenuSidebar = () => {
             url: '/settings',
             icon: 'icon-cog',
         },
+        {
+            text: 'loyalty Points',
+            url: '/loyalty',
+            icon: 'icon-cog',
+        },
     ];
 
     return (

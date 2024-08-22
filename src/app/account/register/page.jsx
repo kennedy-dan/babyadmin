@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Link from 'next/link';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
+// import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';

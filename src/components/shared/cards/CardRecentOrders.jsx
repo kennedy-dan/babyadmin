@@ -1,5 +1,6 @@
 import React from 'react';
 import TableOrderSummary from '~/components/shared/tables/TableOrderSummary';
+import Link from 'next/link';
 
 const CardRecentOrders = () => (
     <div className="ps-card">
@@ -12,10 +13,10 @@ const CardRecentOrders = () => (
         </div>
 
         <div className="ps-card__footer">
-            <a className="ps-card__morelink" href="orders.htmls">
+            <Link className="ps-card__morelink" href="/orders">
                 View Full Orders
                 <i className="icon icon-chevron-right"></i>
-            </a>
+            </Link>
         </div>
     </div>
 );

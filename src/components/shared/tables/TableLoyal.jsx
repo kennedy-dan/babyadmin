@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { Menu } from 'antd';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { orderHistory } from '~/redux/features/productSlice';
+import { getLP } from '~/redux/features/productSlice';
 import { DataTable } from 'primereact/datatable';
 import { tableSearchFunction, tableSearchUI } from './TableSearchFunction';
 
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
-const TableOrdersItems = () => {
+const TableLoyal = () => {
     const dispatch = useDispatch();
-    const { getOrder } = useSelector((state) => state.product);
+    const { getlp } = useSelector((state) => state.product);
     const [rows, setRows] = useState(10);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [filters, setFilters] = useState({
@@ -22,60 +22,62 @@ const TableOrdersItems = () => {
         tableSearchFunction(e, filters, setFilters, setGlobalFilterValue)
     );
     useEffect(() => {
-        dispatch(orderHistory());
-    }, []);
-    
+        dispatch(getLP())
+    }, [])
 
-    const data = getOrder?.results?.data?.data?.data;
+    const data = getlp?.results?.data?.data
     const customData = data;
 
     let columns = [
+        // {
+        //   field: "id",
+        //   header: "id",
+        //   isSort: true,
+        //   body: (rowData, options) => {
+        //     return options.rowIndex + 1;
+        //   },
+        // },
+    
         {
-            field: 'id',
-            header: 'id',
-            isSort: true,
-            body: (rowData, options) => {
-                return options.rowIndex + 1;
-            },
+          field: "Point Value",
+          header: "Point Value",
+          isSort: true,
+          body: (rowData) => {
+            return <p>{rowData?.point_value}</p>;
+          },
+        },
+    
+        {
+          field: "Point Allocation",
+          header: "Point Allocation",
+          body: (rowData, index) => {
+            return <p>{rowData?.point_allocation}</p>;
+          },
         },
 
         {
-            field: 'name',
-            header: 'name',
-            isSort: true,
-            body: (rowData) => {
-                return(
-               <Link href={`/orders/order-detail/${rowData?.id}`}>
-                    <p>{rowData.user?.first_name}</p>
-                </Link>)
+            field: "Min Points For Redemption",
+            header: "Min Points For Redemption",
+            body: (rowData, index) => {
+              return <p>{rowData?.min_points_for_redemption}</p>;
             },
-        },
+          },
 
-        {
-            field: 'status',
-            header: 'Status',
+          {
+            field: "Points Expiry Day",
+            header: "Points Expiry Day",
             body: (rowData, index) => {
-                let badgeView;
-                if (rowData?.payment?.status === 'Completed') {
-                    badgeView = <span className="ps-badge success">Paid</span>;
-                } else {
-                    badgeView = (
-                        <span className="ps-badge gray">
-                            {rowData?.payment?.status}
-                        </span>
-                    );
-                }
-                return <p>{badgeView}</p>;
+              return <p>{rowData?.points_expiry_days}</p>;
             },
-        },
-        {
-            field: 'price',
-            header: 'Price',
+          },  {
+            field: "Max Points Balance",
+            header: "Max Points Balance",
             body: (rowData, index) => {
-                return <p>{rowData?.payment?.amount}</p>;
+              return <p>{rowData?.max_points_balance}</p>;
             },
-        },
-    ];
+          }
+      ];
+
 
     // const tableItemsView = data?.map((item) => {
     //     let badgeView, fullfillmentView;
@@ -151,18 +153,12 @@ const TableOrdersItems = () => {
                 value={customData}
                 // loading={reservationHistory?.isLoading}
                 // paginatorF
-                paginator
+                // paginator
                 rows={rows}
-                rowsPerPageOptions={[5, 10, 25, 50]}
+                // rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={{ minWidth: '30rem' }}
-                style={{ position: 'inherit', fontSize: '16px' }}
-                header={searchBar}
-                globalFilterFields={[
-                    'name',
-                    'price',
-                    // "reserved_start_time",
-                    // "comment",
-                ]}>
+                style={{ position: 'inherit', fontSize: '12px' }}
+             >
                 {columns.map((col, i) => {
                     return (
                         <Column
@@ -179,4 +175,4 @@ const TableOrdersItems = () => {
     );
 };
 
-export default TableOrdersItems;
+export default TableLoyal;
