@@ -29,14 +29,14 @@ export default function Login() {
   
     useEffect(() => {
      if(token) {
-    //   router.push('/')
+      router.push('/')
      }
     }, [token])
     
 
     return (
-        <div className="ps-my-account">
-            <div className="container">
+        <div className="ps-my-account mt-20 flex items-center h-screen justify-center">
+            <div className="w-[40%]">
                 <Form
                     className="ps-form--account"
                     onFinish={(e) => e.preventDefault()}>
@@ -44,9 +44,9 @@ export default function Login() {
                         <li className="active">
                             <Link href={'/account/login'}>Login</Link>
                         </li>
-                        <li>
+                        {/* <li>
                             <Link href={'/account/register'}>Register</Link>
-                        </li>
+                        </li> */}
                     </ul>
                     <div className="ps-tab active" id="sign-in">
                         <div className="ps-form__content">
@@ -110,43 +110,7 @@ export default function Login() {
                                 </button>
                             </div>
                         </div>
-                        <div className="ps-form__footer">
-                            <p>Connect with:</p>
-                            <ul className="ps-list--social">
-                                <li>
-                                    <a
-                                        className="facebook"
-                                        href="#"
-                                        onClick={(e) => e.preventDefault()}>
-                                        <i className="fa fa-facebook" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        className="google"
-                                        href="#"
-                                        onClick={(e) => e.preventDefault()}>
-                                        <i className="fa fa-google-plus" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        className="twitter"
-                                        href="#"
-                                        onClick={(e) => e.preventDefault()}>
-                                        <i className="fa fa-twitter" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        className="instagram"
-                                        href="#"
-                                        onClick={(e) => e.preventDefault()}>
-                                        <i className="fa fa-instagram" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+               
                     </div>
                 </Form>
             </div>

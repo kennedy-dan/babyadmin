@@ -9,7 +9,7 @@ import { Column } from "primereact/column";
 import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdminProducts, AddCoupons } from '~/redux/features/productSlice';
+import { getAdminProducts, AddCoupons, getCoupon } from '~/redux/features/productSlice';
 
 const { Option } = Select;
 const ProductPage = () => {
@@ -19,10 +19,12 @@ const ProductPage = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [discount, setDiscount] = useState(null);
 
-    const { allproducts } = useSelector((state) => state.product);
+    const { allproducts, getcoup } = useSelector((state) => state.product);
 
     useEffect(() => {
         dispatch(getAdminProducts());
+        dispatch(getCoupon())
+
     }, []);
 
     const handleTrackClose = () => {
@@ -36,15 +38,20 @@ const ProductPage = () => {
     };
 
     const data = allproducts?.results?.data?.data?.data;
+    const coup = getcoup?.results?.data?.data
     const columnData= allproducts?.results?.data?.data?.data;
+    // const reversedItems = [...coup]?.reverse();
 
+    // console.log(reversedItems)
     const handleAddCoupon = () => {
         if (selectedDate) {
             const data = {
                 expiry_date: selectedDate,
                 discount: discount,
             };
-            dispatch(AddCoupons(data));
+            dispatch(AddCoupons(data)).then(() => {
+                dispatch(getCoupon())
+            })
             handleTrackClose();
         } else {
             alert('Please select a date');
@@ -80,6 +87,14 @@ const ProductPage = () => {
                 <div className="ps-section__content">
                     <TableProjectItems data={data} />
                 </div>
+                <div className='grid grid-cols-2 gap-6'>
+                    <p>Coupon code</p>
+                    <p>Discount</p>
+                </div>
+                {coup?.slice().reverse().map(item => (
+        <div className='grid grid-cols-2 gap-6' key={item.code}><p>{item.code}</p> <p>{item?.discount}</p> </div>
+    ))}
+         
                 {/* <div className="ps-section__footer">
                     <p>Show 10 in 30 items.</p>
                     <Pagination />

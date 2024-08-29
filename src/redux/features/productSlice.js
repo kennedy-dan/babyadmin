@@ -46,6 +46,13 @@ export const getSingleProduct = createAsyncThunk(
     }
 );
 
+export const getCoupon = createAsyncThunk(
+    `customer/getCoupon`,
+    async (id) => {
+        const response = await axios.get(`/admin/coupons/list`);
+        return response;
+    }
+);
 export const addtocart = createAsyncThunk(
     `customer/addToCart`,
     async (data) => {
@@ -297,6 +304,10 @@ const initialState = {
         results: null,
         isLoading: true,
     },
+    getcoup: {
+        results: null,
+        isLoading: true,
+    },
     addadds: {
         results: null,
         isLoading: false,
@@ -437,7 +448,9 @@ export const productSlice = createSlice({
             .addCase(updateAdminCats.rejected, (state) => {
                 state.updatecats.isLoading = true;
             });
-        builder
+        
+        
+            builder
             .addCase(getAdminProducts.pending, (state) => {
                 state.allproducts.isLoading = true;
             })
@@ -447,6 +460,18 @@ export const productSlice = createSlice({
             })
             .addCase(getAdminProducts.rejected, (state) => {
                 state.allproducts.isLoading = true;
+            });
+
+            builder
+            .addCase(getCoupon.pending, (state) => {
+                state.getcoup.isLoading = true;
+            })
+            .addCase(getCoupon.fulfilled, (state, { payload }) => {
+                state.getcoup.isLoading = false;
+                state.getcoup.results = payload;
+            })
+            .addCase(getCoupon.rejected, (state) => {
+                state.getcoup.isLoading = true;
             });
 
         //single products
@@ -602,6 +627,9 @@ export const productSlice = createSlice({
             .addCase(AddCoupons.fulfilled, (state, { payload }) => {
                 state.addcoupon.isLoading = false;
                 state.addcoupon.results = payload;
+                if(payload?.data?.code === 200){
+                    toast.success('Coupon added successfully')
+                }
             })
             .addCase(AddCoupons.rejected, (state) => {
                 state.addcoupon.isLoading = true;
