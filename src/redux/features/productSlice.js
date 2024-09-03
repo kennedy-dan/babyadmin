@@ -38,6 +38,18 @@ export const AddProducts = createAsyncThunk(
     }
 );
 
+export const UpdateProducts = createAsyncThunk(
+    `customer/UpdateProducts`,
+    async (data) => {
+        const response = await axios.post(`admin/products/update/${data?.id}`, data?.data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response;
+    }
+);
+
 export const getSingleProduct = createAsyncThunk(
     `customer/getSingleProduct`,
     async (id) => {

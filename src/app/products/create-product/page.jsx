@@ -5,7 +5,7 @@ import ContainerDefault from '~/components/layouts/ContainerDefault';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Select, ConfigProvider } from 'antd';
-import { getAdmincategories, AddProducts } from '~/redux/features/productSlice';
+import { getAdmincategories, AddProducts, UpdateProducts } from '~/redux/features/productSlice';
 
 const CreateProductPage = () => {
     const dispatch = useDispatch();

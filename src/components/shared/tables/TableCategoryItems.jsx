@@ -143,7 +143,7 @@ const TableCategoryItems = () => {
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={{ minWidth: '30rem' }}
                 style={{ position: 'inherit', fontSize: '16px' }}
-                header={searchBar}
+                // header={searchBar}
                 globalFilterFields={[
                     'name',
                     'price',

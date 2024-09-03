@@ -9,7 +9,7 @@ import { Column } from "primereact/column";
 import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdminProducts, AddCoupons, getCoupon } from '~/redux/features/productSlice';
+import { getAdminProducts, AddCoupons, getCoupon, UpdateProducts } from '~/redux/features/productSlice';
 
 const { Option } = Select;
 const ProductPage = () => {
@@ -73,14 +73,7 @@ const ProductPage = () => {
                         New Product
                     </Link>
                 </div>
-                <div className="ps-section__actions">
-                    <button
-                        onClick={handleTrackOpen}
-                        className="ps-btn success">
-                        <i className="icon icon-plus mr-2" />
-                        Add Coupon
-                    </button>
-                </div>
+          
                 <div className="ps-section__header">
                    
                 </div>
@@ -91,9 +84,9 @@ const ProductPage = () => {
                     <p>Coupon code</p>
                     <p>Discount</p>
                 </div>
-                {coup?.slice().reverse().map(item => (
+                {/* {coup?.slice().reverse().map(item => (
         <div className='grid grid-cols-2 gap-6' key={item.code}><p>{item.code}</p> <p>{item?.discount}</p> </div>
-    ))}
+    ))} */}
          
                 {/* <div className="ps-section__footer">
                     <p>Show 10 in 30 items.</p>

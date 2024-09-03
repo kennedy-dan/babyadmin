@@ -7,6 +7,7 @@ import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'next/navigation';
 import { orderHistoryId } from '~/redux/features/productSlice';
+import Image from 'next/image';
 
 const OrderDetailPage = () => {
     const dispatch = useDispatch()
@@ -52,14 +53,21 @@ const OrderDetailPage = () => {
                                 <table className="table ps-table">
                                     <thead>
                                         <tr>
+                                        <th>Image</th>
+
                                             <th>Product</th>
                                             <th>Quantity</th>
                                             <th>Price</th>
-                                            <th>Total</th>
+                                            <th >Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {det?.map(item =>   <tr>
+                                        <td>
+                                                <Image width={500} height={500} src={item?.image_url} alt='' className='w-20 h-20' />
+                                                 
+                                                
+                                            </td>
                                             <td>
                                                 <a href="#">
                                                  {item?.product_name}
@@ -115,7 +123,7 @@ const OrderDetailPage = () => {
                     </div>
                 </div>
                 <div className="ps-section__right">
-                    <div className="ps-card ps-card--track-order">
+                    {/* <div className="ps-card ps-card--track-order">
                         <div className="ps-card__header">
                             <h4>Track Order</h4>
                         </div>
@@ -176,7 +184,7 @@ const OrderDetailPage = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </ContainerDefault>

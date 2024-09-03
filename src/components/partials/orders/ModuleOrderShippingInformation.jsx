@@ -10,11 +10,10 @@ const ModuleOrderShippingInformation = ({data}) => {
             <div className="ps-card__content">
                 <h5>{det?.user?.first_name}</h5>
                 <p>
-                    <strong>Address:</strong> 117-195 Iroquois Ave London, ON
-                    N6C 2K9
+                    <strong>Address:</strong> 
                 </p>
                 <p>
-                    <strong>Phone No.:</strong> (+998) 117-211-31
+                    <strong>Phone No.:</strong> 
                 </p>
                 <p>
                     <strong>Email:</strong> {det?.user?.email}

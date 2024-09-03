@@ -35,7 +35,12 @@ const TableOrdersItems = () => {
             header: 'id',
             isSort: true,
             body: (rowData, options) => {
-                return options.rowIndex + 1;
+                return(
+               <Link href={`/orders/order-detail/${rowData?.id}`}>
+
+                { options.rowIndex + 1};
+                </Link>
+                )
             },
         },
 
@@ -45,9 +50,8 @@ const TableOrdersItems = () => {
             isSort: true,
             body: (rowData) => {
                 return(
-               <Link href={`/orders/order-detail/${rowData?.id}`}>
                     <p>{rowData.user?.first_name}</p>
-                </Link>)
+                )
             },
         },
 
@@ -156,7 +160,7 @@ const TableOrdersItems = () => {
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={{ minWidth: '30rem' }}
                 style={{ position: 'inherit', fontSize: '16px' }}
-                header={searchBar}
+                // header={searchBar}
                 globalFilterFields={[
                     'name',
                     'price',

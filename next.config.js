@@ -7,7 +7,11 @@ const nextSettings = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'www.royalbabiesworld.com',
+            hostname: 'www.royalbabiesworld.com'
+        },
+        {
+          protocol: 'https',
+          hostname: 'www.kcnpnm.org'
         },
         ],
       },
