@@ -6,6 +6,7 @@ import { FilterMatchMode } from "primereact/api";
 
 import { InputText } from 'primereact/inputtext';
 import { tableSearchFunction, tableSearchUI } from './TableSearchFunction';
+import Image from 'next/image';
 const TableProjectItems = ({data}) => {
     const customData = data
   const [rows, setRows] = useState(10);
@@ -18,6 +19,14 @@ const TableProjectItems = ({data}) => {
     tableSearchFunction(e, filters, setFilters, setGlobalFilterValue)
   );
     let columns = [
+      {
+        field: "image",
+        header: "image",
+        isSort: true,
+        body: (rowData, options) => {
+          return <Image width={500} height={500} src={rowData?.image_url} alt='' className='w-16 h-16' />;
+        },
+      },
         {
           field: "id",
           header: "id",

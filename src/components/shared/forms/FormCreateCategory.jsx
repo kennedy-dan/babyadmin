@@ -12,7 +12,7 @@ const FormCreateCategory = () => {
         }
         dispatch(addAdmincategories(data)).then(({ error }) => {
             if (!error) {
-                dispatch(getAdmincategories());
+                dispatch(getAdmincategories())
             }
     })}
 

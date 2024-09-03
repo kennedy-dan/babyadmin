@@ -1,18 +1,15 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import ContainerDefault from '~/components/layouts/ContainerDefault';
-import Pagination from '~/components/elements/basic/Pagination';
-import TableProjectItems from '~/components/shared/tables/TableProjectItems';
-import { Select, Modal, DatePicker } from 'antd';
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import Link from 'next/link';
-import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ContainerDefault from '~/components/layouts/ContainerDefault';
+import FormAccountSettings from '~/components/shared/forms/FormAccountSettings';
+import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { getAdminProducts, AddCoupons, getCoupon } from '~/redux/features/productSlice';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Select, Modal, DatePicker } from 'antd';
 
-const { Option } = Select;
-const ProductPage = () => {
+const Coupons = () => {
     const dispatch = useDispatch();
     const [openTrack, setOpenTrack] = useState(false);
 
@@ -22,10 +19,10 @@ const ProductPage = () => {
     const { allproducts, getcoup } = useSelector((state) => state.product);
 
     useEffect(() => {
-        dispatch(getAdminProducts());
         dispatch(getCoupon())
 
     }, []);
+    const coup = getcoup?.results?.data?.data
 
     const handleTrackClose = () => {
         setOpenTrack(false);
@@ -37,12 +34,6 @@ const ProductPage = () => {
         // dispatch(getSingleProduct(id));
     };
 
-    const data = allproducts?.results?.data?.data?.data;
-    const coup = getcoup?.results?.data?.data
-    const columnData= allproducts?.results?.data?.data?.data;
-    // const reversedItems = [...coup]?.reverse();
-
-    // console.log(reversedItems)
     const handleAddCoupon = () => {
         if (selectedDate) {
             const data = {
@@ -57,22 +48,11 @@ const ProductPage = () => {
             alert('Please select a date');
         }
     };
-
     return (
-        <ContainerDefault title="Products">
-            <HeaderDashboard
-                title="Products"
-                description="RBW Product Listing "
-            />
-            <section className="ps-items-listing">
-                <div className="ps-section__actions">
-                    <Link
-                        href="/products/create-product"
-                        className="ps-btn success">
-                        <i className="icon icon-plus mr-2" />
-                        New Product
-                    </Link>
-                </div>
+        <ContainerDefault title="coupons">
+            <HeaderDashboard title="coupons" description="RBW Settings" />
+            <section className="ps-dashboard ">
+                <div className="">
                 <div className="ps-section__actions">
                     <button
                         onClick={handleTrackOpen}
@@ -81,24 +61,12 @@ const ProductPage = () => {
                         Add Coupon
                     </button>
                 </div>
-                <div className="ps-section__header">
-                   
                 </div>
-                <div className="ps-section__content">
-                    <TableProjectItems data={data} />
-                </div>
-                <div className='grid grid-cols-2 gap-6'>
-                    <p>Coupon code</p>
-                    <p>Discount</p>
-                </div>
+                <div>
                 {coup?.slice().reverse().map(item => (
         <div className='grid grid-cols-2 gap-6' key={item.code}><p>{item.code}</p> <p>{item?.discount}</p> </div>
     ))}
-         
-                {/* <div className="ps-section__footer">
-                    <p>Show 10 in 30 items.</p>
-                    <Pagination />
-                </div> */}
+                </div>
                 <Modal
                     width={800}
                     style={{ height: '', width: '600px' }}
@@ -135,4 +103,5 @@ const ProductPage = () => {
         </ContainerDefault>
     );
 };
-export default ProductPage;
+
+export default Coupons;

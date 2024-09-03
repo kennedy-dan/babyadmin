@@ -3,6 +3,14 @@ const nextSettings = {
     eslint: {
         ignoreDuringBuilds: true,
     },
+    images: {
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: 'www.royalbabiesworld.com',
+        },
+        ],
+      },
 };
 
 module.exports = nextSettings;

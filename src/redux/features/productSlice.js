@@ -46,6 +46,15 @@ export const getSingleProduct = createAsyncThunk(
     }
 );
 
+
+export const getMetrics = createAsyncThunk(
+    `customer/getMetrics`,
+    async (id) => {
+        const response = await axios.get(`admin/dashboard/metrics`);
+        return response;
+    }
+);
+
 export const getCoupon = createAsyncThunk(
     `customer/getCoupon`,
     async (id) => {
@@ -304,6 +313,10 @@ const initialState = {
         results: null,
         isLoading: true,
     },
+    getmet: {
+        results: null,
+        isLoading: true,
+    },
     getcoup: {
         results: null,
         isLoading: true,
@@ -432,6 +445,8 @@ export const productSlice = createSlice({
             .addCase(addAdmincategories.fulfilled, (state, { payload }) => {
                 state.addcats.isLoading = false;
                 state.addcats.results = payload;
+                toast.success("Category added successfully")
+
             })
             .addCase(addAdmincategories.rejected, (state) => {
                 state.addcats.isLoading = true;
@@ -472,6 +487,18 @@ export const productSlice = createSlice({
             })
             .addCase(getCoupon.rejected, (state) => {
                 state.getcoup.isLoading = true;
+            });
+
+            builder
+            .addCase(getMetrics.pending, (state) => {
+                state.getmet.isLoading = true;
+            })
+            .addCase(getMetrics.fulfilled, (state, { payload }) => {
+                state.getmet.isLoading = false;
+                state.getmet.results = payload;
+            })
+            .addCase(getMetrics.rejected, (state) => {
+                state.getmet.isLoading = true;
             });
 
         //single products

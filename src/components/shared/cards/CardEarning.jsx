@@ -1,8 +1,21 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
+import {
+    getMetrics
+} from '~/redux/features/productSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const CardEarning = () => {
+    const dispatch = useDispatch()
+    const {getmet} = useSelector(state => state.product)
+
+    const data = getmet?.results?.data?.data
+    useEffect(() => {
+        dispatch(getMetrics())
+    }, [])
+    
     const state = {
         series: [44, 55, 41],
         options: {
@@ -56,7 +69,7 @@ const CardEarning = () => {
                 </div>
                 <div className="ps-card__status">
                     <p className="yellow">
-                        <strong> $20,199</strong>
+                        <strong> {data?.total?.earnings}</strong>
                         <span>Income</span>
                     </p>
                     <p className="red">

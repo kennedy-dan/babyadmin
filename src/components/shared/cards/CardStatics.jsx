@@ -1,7 +1,10 @@
 import React from 'react';
 
-const CardStatics = () => (
-    <section className="ps-card ps-card--statics">
+const CardStatics = ({data}) => {
+    console.log(data)
+
+    return(
+        <section className="ps-card ps-card--statics">
         <div className="ps-card__header">
             <h4>Statics</h4>
             <div className="ps-card__sortby">
@@ -26,31 +29,12 @@ const CardStatics = () => (
                 <div className="ps-block__content">
                     <p>Orders</p>
                     <h4>
-                        254
-                        <small className="asc">
-                            <i className="icon-arrow-up"></i>
-                            <span>12,5%</span>
-                        </small>
+                        {data?.total_orders}
+                      
                     </h4>
                 </div>
             </div>
-            <div className="ps-block--stat pink">
-                <div className="ps-block__left">
-                    <span>
-                        <i className="icon-cart"></i>
-                    </span>
-                </div>
-                <div className="ps-block__content">
-                    <p>Revenue</p>
-                    <h4>
-                        $6,260
-                        <small className="asc">
-                            <i className="icon-arrow-up"></i>
-                            <span>7.1%</span>
-                        </small>
-                    </h4>
-                </div>
-            </div>
+       
             <div className="ps-block--stat green">
                 <div className="ps-block__left">
                     <span>
@@ -60,16 +44,15 @@ const CardStatics = () => (
                 <div className="ps-block__content">
                     <p>Earning</p>
                     <h4>
-                        $2,567
-                        <small className="desc">
-                            <i className="icon-arrow-down"></i>
-                            <span>0.5%</span>
-                        </small>
+                    {data?.total_earnings}
+                      
                     </h4>
                 </div>
             </div>
         </div>
     </section>
-);
+    )
+
+}
 
 export default CardStatics;

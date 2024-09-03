@@ -40,6 +40,11 @@ const MenuSidebar = () => {
             url: '/loyalty',
             icon: 'icon-cog',
         },
+        {
+            text: 'Coupons',
+            url: '/coupon',
+            icon: 'icon-cog',
+        },
     ];
 
     return (

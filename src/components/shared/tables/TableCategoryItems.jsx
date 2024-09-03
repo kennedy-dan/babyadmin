@@ -70,7 +70,9 @@ const TableCategoryItems = () => {
      
         data.append("name", name);
         data.append("image", imagefile);
-        dispatch(updateAdminCats({ data: data, id: id }));
+        dispatch(updateAdminCats({ data: data, id: id })).then(() => {
+            dispatch(getAdmincategories());
+        })
     };
 
     const handleImageUpload = (event) => {

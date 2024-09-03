@@ -18,7 +18,7 @@ const CategoriesPage = () => {
             <section className="ps-dashboard ps-items-listing">
                 <div className="ps-section__left">
                     <div className="ps-section__header">
-                        <FormSearchSimple />
+                        {/* <FormSearchSimple /> */}
                     </div>
                     <div className="ps-section__content">
                         <TableCategoryItems />
