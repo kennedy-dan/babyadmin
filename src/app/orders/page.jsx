@@ -14,11 +14,11 @@ const OrdersPage = () => {
         <ContainerDefault>
             <HeaderDashboard
                 title="Orders"
-                description="Martfury Orders Listing"
+                description="RBW Orders Listing"
             />
             <section className="ps-items-listing">
                 <div className="ps-section__header simple">
-                    <div className="ps-section__filter">
+                    {/* <div className="ps-section__filter">
                         <form
                             className="ps-form--filter"
                             action="index.html"
@@ -50,8 +50,8 @@ const OrdersPage = () => {
                                 </button>
                             </div>
                         </form>
-                    </div>
-                    <div className="ps-section__actions">
+                    </div> */}
+                    {/* <div className="ps-section__actions">
                         <Link href="/products/create-product" className="ps-btn success">
 
                             <i className="icon icon-plus mr-2"></i>New Order
@@ -61,7 +61,7 @@ const OrdersPage = () => {
                             href="new-order.html">
                             <i className="icon icon-download2 mr-2"></i>Export
                         </a>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="ps-section__content">
                     <TableOrdersItems />

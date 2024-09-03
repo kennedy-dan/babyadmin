@@ -38,7 +38,7 @@ const LoyaltyPage = () => {
 
     return (
         <ContainerDefault title="Settings">
-            <HeaderDashboard title="Settings" description="Martfury Settings" />
+            <HeaderDashboard title="Settings" description=" Settings" />
             <section className="ps-dashboard ps-items-listing">
                 <div className="ps-section__left">
                 <TableLoyal />

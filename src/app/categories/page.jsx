@@ -13,7 +13,7 @@ const CategoriesPage = () => {
         <ContainerDefault>
             <HeaderDashboard
                 title="Categories"
-                description="Martfury Category Listing"
+                description="RBW Category Listing"
             />
             <section className="ps-dashboard ps-items-listing">
                 <div className="ps-section__left">

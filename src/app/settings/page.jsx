@@ -7,7 +7,7 @@ import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 const SettingsPage = () => {
     return (
         <ContainerDefault title="Settings">
-            <HeaderDashboard title="Settings" description="Martfury Settings" />
+            <HeaderDashboard title="Settings" description="RBW Settings" />
             <section className="ps-dashboard ps-items-listing">
                 <div className="ps-section__left">
                     <section className="ps-card">
