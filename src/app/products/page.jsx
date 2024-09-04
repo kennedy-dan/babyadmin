@@ -38,6 +38,7 @@ const ProductPage = () => {
     };
 
     const data = allproducts?.results?.data?.data?.data;
+    const dadtcount = allproducts?.results?.data?.data
     const coup = getcoup?.results?.data?.data
     const columnData= allproducts?.results?.data?.data?.data;
     // const reversedItems = [...coup]?.reverse();
@@ -78,7 +79,7 @@ const ProductPage = () => {
                    
                 </div>
                 <div className="ps-section__content">
-                    <TableProjectItems data={data} />
+                    <TableProjectItems data={data} dtc={dadtcount} />
                 </div>
                 <div className='grid grid-cols-2 gap-6'>
                     <p>Coupon code</p>

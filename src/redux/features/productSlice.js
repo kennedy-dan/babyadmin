@@ -20,6 +20,8 @@ export const getAdminProducts = createAsyncThunk(
         const response = await axios.get('admin/products', {
             params: {
                 search: data?.search,
+      page: data?.page,
+
             },
         });
         return response;
@@ -46,6 +48,14 @@ export const UpdateProducts = createAsyncThunk(
                 'Content-Type': 'multipart/form-data',
             },
         });
+        return response;
+    }
+);
+
+export const UpdateStat = createAsyncThunk(
+    `customer/UpdateStat`,
+    async (data) => {
+        const response = await axios.post(`admin/products/status`, data);
         return response;
     }
 );
