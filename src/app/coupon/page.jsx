@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import FormAccountSettings from '~/components/shared/forms/FormAccountSettings';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
-import { getAdminProducts, AddCoupons, getCoupon } from '~/redux/features/productSlice';
+import {
+    getAdminProducts,
+    AddCoupons,
+    getCoupon,
+} from '~/redux/features/productSlice';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Select, Modal, DatePicker } from 'antd';
@@ -19,10 +23,9 @@ const Coupons = () => {
     const { allproducts, getcoup } = useSelector((state) => state.product);
 
     useEffect(() => {
-        dispatch(getCoupon())
-
+        dispatch(getCoupon());
     }, []);
-    const coup = getcoup?.results?.data?.data
+    const coup = getcoup?.results?.data?.data;
 
     const handleTrackClose = () => {
         setOpenTrack(false);
@@ -41,8 +44,8 @@ const Coupons = () => {
                 discount: discount,
             };
             dispatch(AddCoupons(data)).then(() => {
-                dispatch(getCoupon())
-            })
+                dispatch(getCoupon());
+            });
             handleTrackClose();
         } else {
             alert('Please select a date');
@@ -53,20 +56,33 @@ const Coupons = () => {
             <HeaderDashboard title="coupons" description="RBW Settings" />
             <section className="ps-dashboard ">
                 <div className="">
-                <div className="ps-section__actions">
-                    <button
-                        onClick={handleTrackOpen}
-                        className="ps-btn success">
-                        <i className="icon icon-plus mr-2" />
-                        Add Coupon
-                    </button>
+                    <div className="ps-section__actions">
+                        <button
+                            onClick={handleTrackOpen}
+                            className="ps-btn success">
+                            <i className="icon icon-plus mr-2" />
+                            Add Coupon
+                        </button>
+                    </div>
+
+                    <div>
+                    <div className="grid grid-cols-2 font-bold mt-3 gap-6">
+                        <p>Code</p>
+                        <p>Discount Percentage</p>
+                    </div>
+                    {coup
+                        ?.slice()
+                        .reverse()
+                        .map((item) => (
+                            <div
+                                className="grid grid-cols-2 gap-6"
+                                key={item.code}>
+                                <p>{item.code}</p> <p>{item?.discount}</p>{' '}
+                            </div>
+                        ))}
                 </div>
                 </div>
-                <div>
-                {coup?.slice().reverse().map(item => (
-        <div className='grid grid-cols-2 gap-6' key={item.code}><p>{item.code}</p> <p>{item?.discount}</p> </div>
-    ))}
-                </div>
+               
                 <Modal
                     width={800}
                     style={{ height: '', width: '600px' }}
@@ -94,7 +110,7 @@ const Coupons = () => {
                                 type="number"
                                 value={discount}
                                 onChange={(e) => setDiscount(e.target.value)}
-                                className='py-3 px-2 border border-1 '
+                                className="py-3 px-2 border border-1 "
                             />
                         </div>
                     </div>

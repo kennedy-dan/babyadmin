@@ -11,24 +11,21 @@ import "react-toastify/dist/ReactToastify.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
-// export const metadata = {
-//   title: 'Your App Title',
-//   description: 'Your app description',
-//   icons: {
-//     icon: '/favicon.ico', // /public/favicon.ico
-//     // You can add more sizes or formats if needed:
-//     // apple: '/apple-icon.png',
-//     // shortcut: '/shortcut-icon.png',
-//   },
-// }
+export const metadata = {
+  title: 'Your App Title',
+  description: 'Your app description',
+  icons: {
+    icon: '/favicon.ico', // /public/favicon.ico
+    // You can add more sizes or formats if needed:
+    // apple: '/apple-icon.png',
+    // shortcut: '/shortcut-icon.png',
+  },
+}
 
 
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
-           <head>
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-  </head>
               <body>
         <Providers>
            <ToastContainer

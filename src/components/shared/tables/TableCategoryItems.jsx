@@ -32,10 +32,7 @@ const TableCategoryItems = () => {
     const triggerFileInput = () => {
         document.getElementById('fileInput').click();
     };
-    const openModal = (id) => {
-        setOPenQr(true);
-        setId(id);
-    };
+
 
     const closeQrModal = () => {
         setOPenQr(false);
@@ -44,6 +41,11 @@ const TableCategoryItems = () => {
     const [rows, setRows] = useState(10);
     const [name, setName] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
+    const openModal = (rowData) => {
+        setOPenQr(true);
+        setId(rowData?.id);
+        setName(rowData?.name)
+    };
 
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [filters, setFilters] = useState({
@@ -67,9 +69,14 @@ const TableCategoryItems = () => {
       imagefile = await handleUpload();
         console.log(id);
         const data = new FormData();
-     
+     if(name){
         data.append("name", name);
+
+     }
+     if(selectedImage){
         data.append("image", imagefile);
+
+     }
         dispatch(updateAdminCats({ data: data, id: id })).then(() => {
             dispatch(getAdmincategories());
         })
@@ -123,7 +130,7 @@ const TableCategoryItems = () => {
             body: (rowData) => {
                 return (
                     <div>
-                        <button onClick={() => openModal(rowData?.id)}>
+                        <button onClick={() => openModal(rowData)}>
                             Update
                         </button>
                     </div>

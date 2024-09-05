@@ -61,7 +61,7 @@ const TableOrderSummary = () => {
                     <strong>{item?.payment?.amount}</strong>
                 </td>
                 <td>
-                    <DropdownAction />
+                    {/* <DropdownAction /> */}
                 </td>
             </tr>
         );

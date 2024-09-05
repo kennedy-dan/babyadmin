@@ -6,10 +6,7 @@ import '~/public/fonts/font-awesome/css/font-awesome.css';
 import 'public/css/bootstrap.min.css';
 import '~/styles/style.scss';
 
-export const metadata = {
-    title: 'Martfury - Multipurpose Marketplace React Ecommerce Template',
-    description: '',
-}
+
 
 export default function Template({ children }) {
     

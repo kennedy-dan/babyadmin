@@ -1,9 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 const MenuSidebar = () => {
     const router = useRouter();
+    const pathname = usePathname();
+
     const menuItems = [
         {
             text: 'Dashboard',
@@ -48,16 +50,29 @@ const MenuSidebar = () => {
     ];
 
     return (
-        <ul className="menu">
+        <ul className="menu space-y-5">
             {menuItems.map((item, index) => (
-                <li
+                <div
                     key={index}
-                    className={router.pathname === item.url ? 'active' : ''}>
+                    className={
+                        router.pathname === item.url
+                            ? 'active text-yellow-700 space-y-5'
+                            : 'space-y-5'
+                    }>
                     <Link href={item.url}>
-                        <i className={item.icon}></i>
-                        {item.text}
+                        <div className="flex items-center space-x-5 ">
+                            <i className={item.icon}></i>
+                            <div
+                                className={
+                                    pathname === item.url
+                                        ? ' text-yellow-500 font-semibold'
+                                        : ''
+                                }>
+                                {item.text}
+                            </div>
+                        </div>
                     </Link>
-                </li>
+                </div>
             ))}
         </ul>
     );

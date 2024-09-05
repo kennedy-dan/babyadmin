@@ -46,9 +46,13 @@ const TableProjectItems = ({ data, dtc }) => {
     let searchBar = tableSearchUI(globalFilterValue, (e) =>
         tableSearchFunction(e, filters, setFilters, setGlobalFilterValue)
     );
-    const openModal = (id) => {
+    const openModal = (rowData) => {
         setOPenQr(true);
-        setId(id);
+        setId(rowData?.id);
+        setInstock(rowData?.in_stock)
+        setPrice(rowData?.price)
+        setName(rowData?.name)
+        setDescription(rowData?.description)
     };
     const closeQrModal = () => {
         setOPenQr(false);
@@ -246,7 +250,7 @@ const TableProjectItems = ({ data, dtc }) => {
             body: (rowData) => {
                 return (
                     <div>
-                        <button onClick={() => openModal(rowData?.id)}>
+                        <button onClick={() => openModal(rowData)}>
                             Update
                         </button>
                     </div>
@@ -360,7 +364,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                             </div>
                                             <div className="form-group">
                                                 <label>
-                                                    Regular Price<sup>*</sup>
+                                                     Price<sup>*</sup>
                                                 </label>
                                                 <input
                                                     className="form-control"
@@ -372,16 +376,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                                     }
                                                 />
                                             </div>
-                                            <div className="form-group">
-                                                <label>
-                                                    Sale Price<sup>*</sup>
-                                                </label>
-                                                <input
-                                                    className="form-control"
-                                                    type="text"
-                                                    placeholder=""
-                                                />
-                                            </div>
+                                         
                                             <div className="form-group">
                                                 <label>
                                                     Sale Quantity<sup>*</sup>

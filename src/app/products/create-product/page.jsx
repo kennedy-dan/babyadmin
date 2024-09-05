@@ -122,7 +122,7 @@ const CreateProductPage = () => {
                                         </div>
                                         <div className="form-group">
                                             <label>
-                                                Regular Price<sup>*</sup>
+                                                 Price<sup>*</sup>
                                             </label>
                                             <input
                                                 className="form-control"
@@ -134,16 +134,7 @@ const CreateProductPage = () => {
                                                 }
                                             />
                                         </div>
-                                        <div className="form-group">
-                                            <label>
-                                                Sale Price<sup>*</sup>
-                                            </label>
-                                            <input
-                                                className="form-control"
-                                                type="text"
-                                                placeholder=""
-                                            />
-                                        </div>
+                                       
                                         <div className="form-group">
                                             <label>
                                                 Sale Quantity<sup>*</sup>
