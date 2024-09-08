@@ -10,6 +10,7 @@ import { Column } from 'primereact/column';
 import { Modal, Button } from 'antd';
 
 import { FilterMatchMode } from 'primereact/api';
+import { toast } from 'react-toastify';
 const TableCategoryItems = () => {
     const dispatch = useDispatch();
     const [openQr, setOPenQr] = useState(false);
@@ -78,7 +79,10 @@ const TableCategoryItems = () => {
 
      }
         dispatch(updateAdminCats({ data: data, id: id })).then(() => {
-            dispatch(getAdmincategories());
+            dispatch(getAdmincategories()).then(() => {
+                setOPenQr(false)
+                toast.success('Category Updated successfully')
+            })
         })
     };
 
