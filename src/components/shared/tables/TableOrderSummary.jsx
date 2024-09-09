@@ -39,7 +39,12 @@ const TableOrderSummary = () => {
         }
         return (
             <tr key={item?.id}>
-                <td>{item?.id}</td>
+                <td>
+                <Link href={`/orders/order-detail/${item?.id}`}>
+               <p className='text-bluue underline' >{item?.id}</p> 
+                
+                </Link>
+                </td>
                 {/* <td>
                     <Link href="/orders/order-detail">
                         {item?.items?.map(info =>

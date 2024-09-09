@@ -38,7 +38,7 @@ const TableOrdersItems = () => {
                 return(
                <Link href={`/orders/order-detail/${rowData?.id}`}>
 
-                { options.rowIndex + 1};
+               <p className='text-blue-700 underline' > { options.rowIndex + 1}</p>;
                 </Link>
                 )
             },
