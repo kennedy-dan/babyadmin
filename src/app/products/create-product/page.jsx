@@ -211,7 +211,7 @@ const CreateProductPage = () => {
                                                 <Select
                                                     // styles={customSelectStyles}
                                                     id="country"
-                                                    placeholder="Country "
+                                                    placeholder="Category "
                                                     showSearch
                                                     className={` w-full `}
                                                     // className=" "
@@ -232,17 +232,17 @@ const CreateProductPage = () => {
                                                 />
                                             </ConfigProvider>
                                         </div>
-                                        <div className="form-group">
+                                        {/* <div className="form-group">
                                             <label>Video (optional)</label>
                                             <input
                                                 className="form-control"
                                                 type="text"
                                                 placeholder="Enter video URL"
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </figure>
-                                <figure className="ps-block--form-box">
+                                {/* <figure className="ps-block--form-box">
                                     <figcaption>Inventory</figcaption>
                                     <div className="ps-block__content">
                                         <div className="form-group">
@@ -277,8 +277,8 @@ const CreateProductPage = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </figure>
-                                <figure className="ps-block--form-box">
+                                </figure> */}
+                                {/* <figure className="ps-block--form-box">
                                     <figcaption>Meta</figcaption>
                                     <div className="ps-block__content">
                                         <div className="form-group form-group--select">
@@ -310,7 +310,7 @@ const CreateProductPage = () => {
                                             />
                                         </div>
                                     </div>
-                                </figure>
+                                </figure> */}
                             </div>
                         </div>
                     </div>
