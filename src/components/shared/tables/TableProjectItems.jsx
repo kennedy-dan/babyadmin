@@ -17,6 +17,7 @@ import {
     UpdateProducts,
     UpdateStat,
 } from '~/redux/features/productSlice';
+import { toast } from 'react-toastify';
 
 const TableProjectItems = ({ data, dtc }) => {
     const dispatch = useDispatch();
@@ -121,7 +122,11 @@ const TableProjectItems = ({ data, dtc }) => {
                     page: pge,
                 })
             )
+
         );
+        setOPenQr(false);
+        toast.success("Product Updated Successfully")
+
     };
 
     const onPage = (event) => {
@@ -486,7 +491,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                             </div>
 
                                             <div>
-                                                <Image src={selectedImage} alt='' className='w-[200px] h-[200px]' />
+                                                <Image width={500} height={500} src={selectedImage} alt='' className='w-[200px] h-[200px]' />
                                             </div>
                                         </div>
                                     </figure>
