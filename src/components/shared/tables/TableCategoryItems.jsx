@@ -8,7 +8,7 @@ import { DataTable } from 'primereact/datatable';
 import { tableSearchFunction, tableSearchUI } from './TableSearchFunction';
 import { Column } from 'primereact/column';
 import { Modal, Button } from 'antd';
-
+import Image from'next/image'
 import { FilterMatchMode } from 'primereact/api';
 import { toast } from 'react-toastify';
 const TableCategoryItems = () => {
@@ -46,6 +46,7 @@ const TableCategoryItems = () => {
         setOPenQr(true);
         setId(rowData?.id);
         setName(rowData?.name)
+        setSelectedImage(rowData?.image_url)
     };
 
     const [globalFilterValue, setGlobalFilterValue] = useState('');
@@ -203,7 +204,7 @@ const TableCategoryItems = () => {
                         className="ps-btn ps-btn--sm">
                         Choose
                     </button>
-                    <img alt='' src={selectedImage} className='w-16 h-16 ml-4 object-contain' />
+                    <Image  height={500} width={500} alt='' src={selectedImage} className='w-40 h-40 ml-4 object-contain' />
                 </div>
                 <div className='mt-4' >
                     <button className='bg-primary p-2 rounded-lg text-white' onClick={handleUpdate}>Update</button>

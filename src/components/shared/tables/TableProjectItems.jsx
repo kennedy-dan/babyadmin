@@ -53,6 +53,7 @@ const TableProjectItems = ({ data, dtc }) => {
         setPrice(rowData?.price)
         setName(rowData?.name)
         setDescription(rowData?.description)
+        setSelectedImage(rowData?.image_url)
     };
     const closeQrModal = () => {
         setOPenQr(false);
@@ -482,6 +483,10 @@ const TableProjectItems = ({ data, dtc }) => {
                                                         }}
                                                     />
                                                 </ConfigProvider>
+                                            </div>
+
+                                            <div>
+                                                <Image src={selectedImage} alt='' className='w-[200px] h-[200px]' />
                                             </div>
                                         </div>
                                     </figure>
