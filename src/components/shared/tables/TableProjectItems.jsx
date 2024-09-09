@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -14,6 +14,7 @@ import {
     getAdminProducts,
     AddCoupons,
     getCoupon,
+    getAdmincategories,
     UpdateProducts,
     UpdateStat,
 } from '~/redux/features/productSlice';
@@ -28,6 +29,8 @@ const TableProjectItems = ({ data, dtc }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
+    const { getadmincarts } = useSelector((state) => state.product);
+    const catsdata = getadmincarts?.results?.data;
 
     const [cats, setCats] = useState(null);
     const [first, setFirst] = useState(0);
@@ -47,6 +50,10 @@ const TableProjectItems = ({ data, dtc }) => {
     let searchBar = tableSearchUI(globalFilterValue, (e) =>
         tableSearchFunction(e, filters, setFilters, setGlobalFilterValue)
     );
+
+    useEffect(() => {
+        dispatch(getAdmincategories());
+    }, []);
     const openModal = (rowData) => {
         setOPenQr(true);
         setId(rowData?.id);
@@ -471,7 +478,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                                         showSearch
                                                         className={` w-full `}
                                                         // className=" "
-                                                        options={data?.map(
+                                                        options={catsdata?.map(
                                                             (country) => ({
                                                                 value: country?.id,
                                                                 label: country?.name,
