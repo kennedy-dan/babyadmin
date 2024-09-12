@@ -220,10 +220,23 @@ export const getAdsPages = createAsyncThunk(`customer/getAdsPages`, async (id) =
 
 
 
+
+
+
+
 export const AddPgs = createAsyncThunk(
     `customer/AddPgs`,
     async (data) => {
         const response = await axios.post('admin/cms/pages', data);
+        return response;
+    }
+);
+
+
+export const AddSize = createAsyncThunk(
+    `customer/AddSize`,
+    async (data) => {
+        const response = await axios.post('admin/sizes', data);
         return response;
     }
 );
@@ -308,6 +321,13 @@ export const getLP = createAsyncThunk(
         return response;
     }
 );
+export const getsizes = createAsyncThunk(
+    'customer/getsizes',
+    async (data) => {
+        const response = await axios.get(`admin/sizes`);
+        return response.data;
+    }
+);
 
 const initialState = {
     getadmincarts: {
@@ -316,6 +336,10 @@ const initialState = {
     },
 
     addcats: {
+        results: null,
+        isLoading: false,
+    },
+    addsize: {
         results: null,
         isLoading: false,
     },
@@ -393,6 +417,10 @@ const initialState = {
     singlecats: {
         results: null,
         isLoading: true,
+    },
+    sizes: {
+        isLoading: false,
+        results: null,
     },
 
     checkout: {
@@ -485,7 +513,30 @@ export const productSlice = createSlice({
             .addCase(updateAdminCats.rejected, (state) => {
                 state.updatecats.isLoading = true;
             });
-        
+
+            builder
+            .addCase(AddSize.pending, (state) => {
+                state.addsize.isLoading = true;
+            })
+            .addCase(AddSize.fulfilled, (state, { payload }) => {
+                state.addsize.isLoading = false;
+                state.addsize.results = payload;
+                toast.success('Size created successfully')
+            })
+            .addCase(AddSize.rejected, (state) => {
+                state.addsize.isLoading = true;
+            });
+            builder
+            .addCase(getsizes.pending, (state) => {
+                state.sizes.isLoading = true;
+            })
+            .addCase(getsizes.fulfilled, (state, { payload }) => {
+                state.sizes.isLoading = false;
+                state.sizes.results = payload;
+            })
+            .addCase(getsizes.rejected, (state) => {
+                state.sizes.isLoading = true;
+            });
         
             builder
             .addCase(getAdminProducts.pending, (state) => {

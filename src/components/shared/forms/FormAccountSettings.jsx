@@ -9,6 +9,7 @@ import {
     AddAds,
     AddPgs,
     getAdsPages,
+    AddSize
 } from '~/redux/features/productSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Modal, Button } from 'antd';
@@ -18,6 +19,7 @@ const FormAccountSettings = () => {
     const dispatch = useDispatch();
     const [name, setName] = useState('');
     const [title, setTitle] = useState('');
+    const [size, setSize] = useState('');
     const [description, setDescription] = useState('');
     const [cats, setCats] = useState(null);
     const [openQr, setOPenQr] = useState(false);
@@ -107,9 +109,15 @@ const FormAccountSettings = () => {
             console.error('Failed to add page:', error);
         }
     };
+    const submitSize = () => {
+        const data = {
+            size_name: size
+        }
+        dispatch(AddSize(data))
+    }
     return (
         <div className="ps-form--account-settings">
-            <div className='mb-10' >
+            <div className="mb-10">
                 <button onClick={openModal} className="ps-btn py-3 ps-btn--sm">
                     Create page
                 </button>
@@ -225,6 +233,19 @@ const FormAccountSettings = () => {
             <div className="ps-form__submit">
                 <button onClick={handleSubmit} className="ps-btn success">
                     Save Content
+                </button>
+            </div>
+            <div className='my-6'  >
+                <p>Create Sizes</p>
+                <div>
+                    <input
+                        className="form-control"
+                        value={size}
+                        onChange={(e) => setSize(e.target.value)}
+                    />
+                </div>
+                <button className="ps-btn success" onClick={submitSize} >
+                                Create Size
                 </button>
             </div>
             <Modal

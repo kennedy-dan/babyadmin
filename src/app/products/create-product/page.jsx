@@ -5,7 +5,13 @@ import ContainerDefault from '~/components/layouts/ContainerDefault';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Select, ConfigProvider } from 'antd';
-import { getAdmincategories, AddProducts, UpdateProducts } from '~/redux/features/productSlice';
+import {
+    getAdmincategories,
+    AddProducts,
+    UpdateProducts,
+    getsizes,
+} from '~/redux/features/productSlice';
+import { toast } from 'react-toastify';
 
 const CreateProductPage = () => {
     const dispatch = useDispatch();
@@ -14,25 +20,33 @@ const CreateProductPage = () => {
     const [cats, setCats] = useState(null);
     const [price, setPrice] = useState(null);
     const [stock, setInstock] = useState(null);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
-    const { getadmincarts } = useSelector((state) => state.product);
+    const { getadmincarts, sizes } = useSelector((state) => state.product);
+
+    const sizedata = sizes?.results?.data
 
     const handleUpload = async () => {
         try {
-          const response = await fetch(selectedImage);
-          const blob = await response.blob();
-          const file = new File([blob], 'image.png', { type: blob.type });
-            console.log(file)
-          return file
-          
+            const response = await fetch(selectedImage);
+            const blob = await response.blob();
+            const file = new File([blob], 'image.png', { type: blob.type });
+            console.log(file);
+            return file;
         } catch (error) {
-          console.error('Error converting URL to file:', error);
+            console.error('Error converting URL to file:', error);
         }
-      };
+    };
 
+    console.log(selectedOptions)
+
+    const handleChange = (value) => {
+        setSelectedOptions(value);
+    };
     const handleSubmit = async () => {
-        let imagefile
+        let imagefile;
 
         imagefile = await handleUpload();
         // const data = {
@@ -44,16 +58,19 @@ const CreateProductPage = () => {
         //     image: imagefile,
         // };
         const data = new FormData();
-        data.append("category_id", cats);
-        data.append("price", price);
-        data.append("in_stock", stock);
-        data.append("description", description);
-        data.append("name", name);
-        data.append("image", imagefile);
-        dispatch(AddProducts(data))
+        data.append('category_id', cats);
+        data.append('price', price);
+        data.append('in_stock', stock);
+        data.append('description', description);
+        data.append('name', name);
+        data.append('image', imagefile);
+          selectedOptions.forEach(option => {
+        data.append('sizes[]', option);
+    });
+        dispatch(AddProducts(data)).then(() => {
+            toast.success('Product created successfully')
+        })
     };
-
-    
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -75,6 +92,7 @@ const CreateProductPage = () => {
 
     useEffect(() => {
         dispatch(getAdmincategories());
+        dispatch(getsizes());
     }, []);
     const triggerFileInput = () => {
         document.getElementById('fileInput').click();
@@ -122,7 +140,7 @@ const CreateProductPage = () => {
                                         </div>
                                         <div className="form-group">
                                             <label>
-                                                 Price<sup>*</sup>
+                                                Price<sup>*</sup>
                                             </label>
                                             <input
                                                 className="form-control"
@@ -134,7 +152,7 @@ const CreateProductPage = () => {
                                                 }
                                             />
                                         </div>
-                                       
+
                                         <div className="form-group">
                                             <label>
                                                 Sale Quantity<sup>*</sup>
@@ -162,8 +180,7 @@ const CreateProductPage = () => {
                                                     setDescription(
                                                         e.target.value
                                                     )
-                                                }
-                                                ></textarea>
+                                                }></textarea>
                                         </div>
                                     </div>
                                 </figure>
@@ -189,6 +206,36 @@ const CreateProductPage = () => {
                                                     Choose
                                                 </button>
                                             </div>
+                                        </div>
+                                        <div>
+                                         <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Select: {
+                                                            optionSelectedFontWeight: 600,
+                                                        },
+                                                    },
+                                                    // ...customTheme,
+                                                    token: {
+                                                        borderRadius: 0,
+                                                        controlHeight: 60,
+                                                        colorBgContainer:
+                                                            '#f0f0f0',
+                                                        fontSize: 16,
+                                                        // optionSelectedFontWeight: 300
+                                                    },
+                                                }}>
+                                            <Select
+                                                mode="multiple"
+                                                placeholder="Select options"
+                                                style={{ width: '100%' }}
+                                                onChange={handleChange}>
+                                                {sizedata?.map(items => <Option value={items?.id}>
+                                                    {items?.size_name}
+                                                </Option>)}
+                                           
+                                            </Select>
+                                            </ConfigProvider>
                                         </div>
                                         <div className="form-group form-group--nest">
                                             <ConfigProvider
@@ -315,13 +362,10 @@ const CreateProductPage = () => {
                         </div>
                     </div>
                     <div className="ps-form__bottom">
-                        <a
-                            className="ps-btn ps-btn--black"
-                            href="products.html">
-                            Back
-                        </a>
-                        <button className="ps-btn ps-btn--gray">Cancel</button>
-                        <button onClick={handleSubmit} className="ps-btn">Submit</button>
+                     
+                        <button onClick={handleSubmit} className="ps-btn">
+                            Submit
+                        </button>
                     </div>
                 </div>
             </section>
