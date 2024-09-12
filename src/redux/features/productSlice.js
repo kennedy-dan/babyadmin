@@ -143,6 +143,14 @@ export const updateAdminCats = createAsyncThunk(
         return response.data;
     }
 );
+
+export const deleteAdminCats = createAsyncThunk(
+    'admin/deleteAdminCats',
+    async (data) => {
+        const response = await axios.delete(`admin/product-categories/${data.id}`);
+        return response.data;
+    }
+);
 export const getSingleCats = createAsyncThunk(
     `customer/getSingleCats`,
     async (id) => {
@@ -495,7 +503,6 @@ export const productSlice = createSlice({
             .addCase(addAdmincategories.fulfilled, (state, { payload }) => {
                 state.addcats.isLoading = false;
                 state.addcats.results = payload;
-                toast.success("Category added successfully")
 
             })
             .addCase(addAdmincategories.rejected, (state) => {
@@ -521,7 +528,6 @@ export const productSlice = createSlice({
             .addCase(AddSize.fulfilled, (state, { payload }) => {
                 state.addsize.isLoading = false;
                 state.addsize.results = payload;
-                toast.success('Size created successfully')
             })
             .addCase(AddSize.rejected, (state) => {
                 state.addsize.isLoading = true;

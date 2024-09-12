@@ -60,7 +60,7 @@ const FormAccountSettings = () => {
 
     const openModal = (id) => {
         setOPenQr(true);
-        setId(id);
+        // setId(id);
     };
 
     const closeQrModal = () => {
@@ -85,7 +85,13 @@ const FormAccountSettings = () => {
             data.append('files[]', file);
         });
 
-        dispatch(AddAds(data));
+        dispatch(AddAds(data)).then((error) => {
+            if(error?.payload?.status === 200){
+                toast.success('Page section successfully')
+
+            }
+            
+        })
     };
 
     const submit = async () => {
@@ -102,18 +108,32 @@ const FormAccountSettings = () => {
             // Assuming the response contains an id field
             if (response && response.data.data.id) {
                 toast.success('Page Added Successfully');
+                dispatch(getAdsPages())
                 setOPenQr(false);
             }
         } catch (error) {
             // Handle any errors here
+            toast.error('Failed to add page')
+            setOPenQr(false);
+
             console.error('Failed to add page:', error);
         }
     };
     const submitSize = () => {
+        if(!size){
+            toast.error('Enter size')
+            return
+        }
         const data = {
             size_name: size
         }
-        dispatch(AddSize(data))
+        dispatch(AddSize(data)).then((error) => {
+            if(error?.payload?.status === 200){
+                toast.success('Size created successfully')
+
+            }
+            
+        })
     }
     return (
         <div className="ps-form--account-settings">
@@ -244,7 +264,7 @@ const FormAccountSettings = () => {
                         onChange={(e) => setSize(e.target.value)}
                     />
                 </div>
-                <button className="ps-btn success" onClick={submitSize} >
+                <button className="ps-btn success mt-3" onClick={submitSize} >
                                 Create Size
                 </button>
             </div>

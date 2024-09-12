@@ -46,7 +46,18 @@ const CreateProductPage = () => {
         setSelectedOptions(value);
     };
     const handleSubmit = async () => {
+
+        if(selectedOptions?.length < 1){
+            toast.error('Size is required')
+            return
+        }
+        if(!cats){
+            toast.error('Category is required')
+            return
+        }
         let imagefile;
+
+
 
         imagefile = await handleUpload();
         // const data = {
@@ -67,8 +78,11 @@ const CreateProductPage = () => {
           selectedOptions.forEach(option => {
         data.append('sizes[]', option);
     });
-        dispatch(AddProducts(data)).then(() => {
-            toast.success('Product created successfully')
+        dispatch(AddProducts(data)).then((error) => {
+            if(error?.payload?.status === 200){
+                toast.success('Product created successfully')
+
+            }
         })
     };
 
@@ -207,7 +221,7 @@ const CreateProductPage = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div className='my-8' >
                                          <ConfigProvider
                                                 theme={{
                                                     components: {
@@ -227,7 +241,7 @@ const CreateProductPage = () => {
                                                 }}>
                                             <Select
                                                 mode="multiple"
-                                                placeholder="Select options"
+                                                placeholder="Select size"
                                                 style={{ width: '100%' }}
                                                 onChange={handleChange}>
                                                 {sizedata?.map(items => <Option value={items?.id}>

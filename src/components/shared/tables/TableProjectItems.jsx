@@ -123,16 +123,19 @@ const TableProjectItems = ({ data, dtc }) => {
         if (selectedImage) {
             data.append('image', imagefile);
         }
-        dispatch(UpdateProducts({ data, id })).then(() =>
+        dispatch(UpdateProducts({ data, id })).then((error) =>{
+            if(error?.payload?.status === 200){
+        toast.success("Product Updated Successfully")
+
+            }
             dispatch(
                 getAdminProducts({
                     page: pge,
                 })
             )
-
+}
         );
         setOPenQr(false);
-        toast.success("Product Updated Successfully")
 
     };
 
@@ -162,8 +165,14 @@ const TableProjectItems = ({ data, dtc }) => {
             product_id: rowData.id,
             status: status,
         };
-        dispatch(UpdateStat(data)).then(() =>
+        dispatch(UpdateStat(data)).then((error) =>{
+            console.log(error)
+            if(error?.payload?.status === 200){
+                    toast.success('Status updated successfully')
+                    console.log('yhhhok')
+            }
             dispatch(getAdminProducts({ page: pge }))
+        }
         );
     };
 

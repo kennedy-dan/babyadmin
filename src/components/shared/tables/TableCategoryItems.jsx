@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     getAdmincategories,
     updateAdminCats,
+    deleteAdminCats
 } from '~/redux/features/productSlice';
 import { DataTable } from 'primereact/datatable';
+import { IoTrashBinSharp } from "react-icons/io5";
+
 import { tableSearchFunction, tableSearchUI } from './TableSearchFunction';
 import { Column } from 'primereact/column';
 import { Modal, Button } from 'antd';
@@ -80,9 +83,12 @@ const TableCategoryItems = () => {
 
      }
         dispatch(updateAdminCats({ data: data, id: id })).then(() => {
-            dispatch(getAdmincategories()).then(() => {
+            dispatch(getAdmincategories()).then((error) => {
                 setOPenQr(false)
-                toast.success('Category Updated successfully')
+                if(error?.payload?.code === 200){
+                    toast.success('Category Updated successfully')
+
+                }
             })
         })
     };
@@ -99,6 +105,17 @@ const TableCategoryItems = () => {
           reader.readAsDataURL(file);
       }
   };
+
+  const deleteCats = (id) => {
+    dispatch(deleteAdminCats({ id: id })).then(() => {
+        dispatch(getAdmincategories()).then((error) => {
+            if(error?.payload?.code === 200){
+                toast.success('Category deleted successfully')
+
+            }
+        })
+    })
+  }
 
     let columns = [
         {
@@ -130,13 +147,28 @@ const TableCategoryItems = () => {
 
         {
             field: '',
-            header: 'Action',
+            header: 'Update',
             isSort: true,
             body: (rowData) => {
                 return (
                     <div>
                         <button onClick={() => openModal(rowData)}>
                             Update
+                        </button>
+                    </div>
+                );
+            },
+        },
+
+        {
+            field: '',
+            header: 'Delete',
+            isSort: true,
+            body: (rowData) => {
+                return (
+                    <div>
+                        <button onClick={() => deleteCats(rowData.id)}>
+                            Delete
                         </button>
                     </div>
                 );
