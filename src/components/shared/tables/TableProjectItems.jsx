@@ -219,6 +219,8 @@ const TableProjectItems = ({ data, dtc }) => {
                 }
             });
         });
+        setDelMod(false);
+
     };
 
     const menuView = (rowData) => {
