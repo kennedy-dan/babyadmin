@@ -52,6 +52,14 @@ export const UpdateProducts = createAsyncThunk(
     }
 );
 
+export const delProducts = createAsyncThunk(
+    `customer/delProducts`,
+    async (data) => {
+        const response = await axios.delete(`admin/products/${data?.id}`);
+        return response;
+    }
+);
+
 export const UpdateStat = createAsyncThunk(
     `customer/UpdateStat`,
     async (data) => {
@@ -226,6 +234,11 @@ export const getAdsPages = createAsyncThunk(`customer/getAdsPages`, async (id) =
     return response.data;
 });
 
+export const delAdsPages = createAsyncThunk(`customer/delAdsPages`, async (id) => {
+    const response = await axios.delete(`admin/cms/pages/${id}`);
+    return response.data;
+});
+
 
 
 
@@ -245,6 +258,14 @@ export const AddSize = createAsyncThunk(
     `customer/AddSize`,
     async (data) => {
         const response = await axios.post('admin/sizes', data);
+        return response;
+    }
+);
+
+export const delSize = createAsyncThunk(
+    `customer/delSize`,
+    async (data) => {
+        const response = await axios.delete(`admin/sizes/${data}`);
         return response;
     }
 );

@@ -17,7 +17,9 @@ import { toast } from 'react-toastify';
 const TableCategoryItems = () => {
     const dispatch = useDispatch();
     const [openQr, setOPenQr] = useState(false);
+    const [delMod, setDelMod] = useState(false);
     const [id, setId] = useState(null);
+    const [delid, setdelId] = useState(null);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const { getadmincarts } = useSelector((state) => state.product);
@@ -37,6 +39,14 @@ const TableCategoryItems = () => {
         document.getElementById('fileInput').click();
     };
 
+    const opendelModal = (id) => {
+        setDelMod(true)
+        setdelId(id)
+    }
+
+    const closedelModal = () => {
+        setDelMod(false)
+    }
 
     const closeQrModal = () => {
         setOPenQr(false);
@@ -106,8 +116,8 @@ const TableCategoryItems = () => {
       }
   };
 
-  const deleteCats = (id) => {
-    dispatch(deleteAdminCats({ id: id })).then(() => {
+  const deleteCats = () => {
+    dispatch(deleteAdminCats({ id: delid })).then(() => {
         dispatch(getAdmincategories()).then((error) => {
             if(error?.payload?.code === 200){
                 toast.success('Category deleted successfully')
@@ -120,7 +130,7 @@ const TableCategoryItems = () => {
     let columns = [
         {
             field: 'id',
-            header: 'id',
+            header: 'S/N',
             isSort: true,
             body: (rowData, options) => {
                 return options.rowIndex + 1;
@@ -129,51 +139,47 @@ const TableCategoryItems = () => {
 
         {
             field: 'name',
-            header: 'name',
+            header: 'Name',
             isSort: true,
             body: (rowData) => {
                 return <p>{rowData.name}</p>;
             },
         },
 
-        {
-            field: 'name',
-            header: 'Slug',
-            isSort: true,
-            body: (rowData) => {
-                return <p>{rowData.name}</p>;
-            },
-        },
+      
 
         {
             field: '',
-            header: 'Update',
+            header: 'Action',
             isSort: true,
             body: (rowData) => {
                 return (
-                    <div>
-                        <button onClick={() => openModal(rowData)}>
+                    <div className='flex space-x-4' >
+                        <button className='bg-green-700 rounded-md text-white px-4 py-2' onClick={() => openModal(rowData)}>
                             Update
                         </button>
+                          <button className='bg-red-700 rounded-md text-white px-4 py-2' onClick={() => opendelModal(rowData.id)}>
+                          Delete
+                      </button>
                     </div>
                 );
             },
         },
 
-        {
-            field: '',
-            header: 'Delete',
-            isSort: true,
-            body: (rowData) => {
-                return (
-                    <div>
-                        <button onClick={() => deleteCats(rowData.id)}>
-                            Delete
-                        </button>
-                    </div>
-                );
-            },
-        },
+        // {
+        //     field: '',
+        //     header: 'Delete',
+        //     isSort: true,
+        //     body: (rowData) => {
+        //         return (
+        //             <div>
+        //                 <button onClick={() => deleteCats(rowData.id)}>
+        //                     Delete
+        //                 </button>
+        //             </div>
+        //         );
+        //     },
+        // },
     ];
 
     return (
@@ -184,6 +190,8 @@ const TableCategoryItems = () => {
                 // paginatorF
                 paginator
                 rows={rows}
+                rowClassName={() => 'table-row-border'}
+
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 tableStyle={{ minWidth: '30rem' }}
                 style={{ position: 'inherit', fontSize: '16px' }}
@@ -206,6 +214,21 @@ const TableCategoryItems = () => {
                     );
                 })}
             </DataTable>
+            <Modal
+                // title="Print QR"
+                open={delMod}
+                // onOk={handleOk}
+                footer={false}
+                onCancel={closedelModal}
+                maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+                style={{ marginTop: 0 }}>
+                    
+                    <p>Deleted Category?</p>
+                    <div className='flex justify-end space-x-4' >
+                        <button className='bg-green-600 rounded-md text-white px-4 py-2' onClick={deleteCats} >Yes</button>
+                        <button className='bg-red-700 rounded-md text-white px-4 py-2' onClick={closedelModal}>No</button>
+                    </div>
+                     </Modal>
             <Modal
                 // title="Print QR"
                 open={openQr}

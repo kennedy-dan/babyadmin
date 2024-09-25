@@ -9,6 +9,8 @@ import { tableSearchFunction, tableSearchUI } from './TableSearchFunction';
 import Image from 'next/image';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Select, ConfigProvider, Modal, Switch } from 'antd';
+import { Dropdown, Menu } from 'antd';
+
 
 import {
     getAdminProducts,
@@ -17,6 +19,8 @@ import {
     getAdmincategories,
     UpdateProducts,
     UpdateStat,
+    getsizes,
+    delProducts
 } from '~/redux/features/productSlice';
 import { toast } from 'react-toastify';
 
@@ -27,16 +31,24 @@ const TableProjectItems = ({ data, dtc }) => {
     const [openQr, setOPenQr] = useState(false);
     const [id, setId] = useState(null);
     const [name, setName] = useState('');
+    const [delMod, setDelMod] = useState(false);
+
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
-    const { getadmincarts } = useSelector((state) => state.product);
+    const { getadmincarts, sizes } = useSelector((state) => state.product);
     const catsdata = getadmincarts?.results?.data;
+    const [selectedOptions, setSelectedOptions] = useState(null);
+    // const [id, setId] = useState(null);
+    const [delid, setdelId] = useState(null);
 
     const [cats, setCats] = useState(null);
     const [first, setFirst] = useState(0);
     const [pge, setPge] = useState(0);
     const [hoveredImage, setHoveredImage] = useState(null); // State to store hovered image
     const [showImageModal, setShowImageModal] = useState(false); // State to control image modal
+
+    const sizedata = sizes?.results?.data
+
 
     const [price, setPrice] = useState(null);
     const [stock, setInstock] = useState(null);
@@ -53,7 +65,13 @@ const TableProjectItems = ({ data, dtc }) => {
 
     useEffect(() => {
         dispatch(getAdmincategories());
+        dispatch(getsizes());
+
     }, []);
+
+    const handleChange = (value) => {
+        setSelectedOptions(value);
+    };
     const openModal = (rowData) => {
         setOPenQr(true);
         setId(rowData?.id);
@@ -62,10 +80,20 @@ const TableProjectItems = ({ data, dtc }) => {
         setName(rowData?.name)
         setDescription(rowData?.description)
         setSelectedImage(rowData?.image_url)
+        setSelectedOptions(rowData?.product_sizes)
     };
     const closeQrModal = () => {
         setOPenQr(false);
     };
+
+    const opendelModal = (id) => {
+        setDelMod(true)
+        setdelId(id)
+    }
+
+    const closedelModal = () => {
+        setDelMod(false)
+    }
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -90,6 +118,7 @@ const TableProjectItems = ({ data, dtc }) => {
             console.error('Error converting URL to file:', error);
         }
     };
+
 
     const handleSubmit = async () => {
         let imagefile;
@@ -185,6 +214,37 @@ const TableProjectItems = ({ data, dtc }) => {
         setShowImageModal(false);
     };
 
+    const deleteCats = () => {
+        dispatch(delProducts({ id: delid })).then(() => {
+            dispatch(getAdminProducts()).then((error) => {
+                if(error?.payload?.code === 200){
+                    toast.success('Product deleted successfully')
+    
+                }
+            })
+        })
+      }
+
+    const menuView = (rowData) => {
+        console.log(rowData)
+        return (
+            <Menu>
+                <Menu.Item key={0}>
+                    <button onClick={() => openModal(rowData)}>
+                        <i className="icon-pencil mr-2"></i>
+                        Edit
+                    </button>
+                </Menu.Item>
+                <Menu.Item key={0}>
+                    <button onClick={() => opendelModal(rowData.id)} >
+                        <i className="icon-trash2 mr-2"></i>
+                        Delete
+                    </button>
+                </Menu.Item>
+            </Menu>
+        );
+    } 
+
     let columns = [
         // {
         //     field: 'image',
@@ -212,7 +272,7 @@ const TableProjectItems = ({ data, dtc }) => {
             isSort: true,
             body: (rowData, options) => {
                 return (
-                <span  onMouseEnter={() => handleImageHover(rowData.image_url)}>
+                <span >
                 {options.rowIndex + 1}
                 </span>
                 ) 
@@ -221,15 +281,15 @@ const TableProjectItems = ({ data, dtc }) => {
 
         {
             field: 'name',
-            header: 'name',
+            header: 'Name',
             isSort: true,
             body: (rowData) => {
-                return <p>{rowData?.name}</p>;
+                return <p className='w-fit'  onMouseEnter={() => handleImageHover(rowData.image_url)}>{rowData?.name}</p>;
             },
         },
         {
             field: 'category',
-            header: 'category',
+            header: 'Category',
             isSort: true,
             body: (rowData) => {
                 return <p>{rowData?.category?.name}</p>;
@@ -238,7 +298,7 @@ const TableProjectItems = ({ data, dtc }) => {
 
         {
             field: 'stock',
-            header: 'stock',
+            header: 'Stock',
             body: (rowData, index) => {
                 return <p>{rowData?.in_stock}</p>;
             },
@@ -275,6 +335,24 @@ const TableProjectItems = ({ data, dtc }) => {
                         <button onClick={() => openModal(rowData)}>
                             Update
                         </button>
+                    </div>
+                );
+            },
+        },
+
+        {
+            field: 'Action',
+            header: 'Action',
+            body: (rowData) => {
+                return (
+                    <div>
+            <Dropdown overlay={() => menuView(rowData)} className="ps-dropdown">
+            <a
+                onClick={(e) => e.preventDefault()}
+                className="ps-dropdown__toggle">
+                <i className="icon-ellipsis"></i>
+            </a>
+        </Dropdown>
                     </div>
                 );
             },
@@ -342,6 +420,21 @@ const TableProjectItems = ({ data, dtc }) => {
             </Modal>
             <Modal
                 // title="Print QR"
+                open={delMod}
+                // onOk={handleOk}
+                footer={false}
+                onCancel={closedelModal}
+                maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+                style={{ marginTop: 0 }}>
+                    
+                    <p>Deleted Product?</p>
+                    <div className='flex justify-end space-x-4' >
+                        <button className='bg-green-600 rounded-md text-white px-4 py-2' onClick={deleteCats} >Yes</button>
+                        <button className='bg-red-700 rounded-md text-white px-4 py-2' onClick={closedelModal}>No</button>
+                    </div>
+                     </Modal>
+            <Modal
+                // title="Print QR"
                 open={openQr}
                 // onOk={handleOk}
                 footer={false}
@@ -358,7 +451,7 @@ const TableProjectItems = ({ data, dtc }) => {
                             <div className="row">
                                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <figure className="ps-block--form-box">
-                                        <figcaption>General</figcaption>
+                                        <figcaption className='text-white' >General</figcaption>
                                         <div className="ps-block__content">
                                             <div className="form-group">
                                                 <label>
@@ -436,7 +529,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                 </div>
                                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <figure className="ps-block--form-box">
-                                        <figcaption>Product Images</figcaption>
+                                        <figcaption className='text-white' >Product Images</figcaption>
                                         <div className="ps-block__content">
                                             <div className="form-group">
                                                 <label>Product Gallery</label>
@@ -505,7 +598,36 @@ const TableProjectItems = ({ data, dtc }) => {
                                                     />
                                                 </ConfigProvider>
                                             </div>
-
+                                            <div className='my-8' >
+                                         <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Select: {
+                                                            optionSelectedFontWeight: 600,
+                                                        },
+                                                    },
+                                                    // ...customTheme,
+                                                    token: {
+                                                        borderRadius: 0,
+                                                        controlHeight: 60,
+                                                        colorBgContainer:
+                                                            '#f0f0f0',
+                                                        fontSize: 16,
+                                                        // optionSelectedFontWeight: 300
+                                                    },
+                                                }}>
+                                            <Select
+                                                mode="multiple"
+                                                placeholder="Select size"
+                                                style={{ width: '100%' }}
+                                                onChange={handleChange}>
+                                                {sizedata?.map(items => <Option value={items?.id}>
+                                                    {items?.size_name}
+                                                </Option>)}
+                                           
+                                            </Select>
+                                            </ConfigProvider>
+                                        </div>
                                             <div>
                                                 <Image width={500} height={500} src={selectedImage} alt='' className='w-[200px] h-[200px]' />
                                             </div>
