@@ -22,10 +22,7 @@ const CategoriesPage = () => {
                     </div>
                     <div className="ps-section__content">
                         <TableCategoryItems />
-                        <div className="ps-section__footer">
-                            <p>Show 5 in 30 items.</p>
-                            <Pagination />
-                        </div>
+                     
                     </div>
                 </div>
                 <div className="ps-section__right">

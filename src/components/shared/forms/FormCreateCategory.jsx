@@ -30,7 +30,7 @@ const FormCreateCategory = () => {
             <div className="ps-form__content">
                 <div className="form-group">
                     <label>
-                        Name<sup>*</sup>
+                        Create New Category<sup>*</sup>
                     </label>
                     <input
                         className="form-control"

@@ -20,8 +20,7 @@ export const getAdminProducts = createAsyncThunk(
         const response = await axios.get('admin/products', {
             params: {
                 search: data?.search,
-      page: data?.page,
-
+                page: data?.page,
             },
         });
         return response;
@@ -43,11 +42,15 @@ export const AddProducts = createAsyncThunk(
 export const UpdateProducts = createAsyncThunk(
     `customer/UpdateProducts`,
     async (data) => {
-        const response = await axios.post(`admin/products/update/${data?.id}`, data?.data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post(
+            `admin/products/update/${data?.id}`,
+            data?.data,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
         return response;
     }
 );
@@ -76,7 +79,6 @@ export const getSingleProduct = createAsyncThunk(
     }
 );
 
-
 export const getMetrics = createAsyncThunk(
     `customer/getMetrics`,
     async (id) => {
@@ -85,13 +87,10 @@ export const getMetrics = createAsyncThunk(
     }
 );
 
-export const getCoupon = createAsyncThunk(
-    `customer/getCoupon`,
-    async (id) => {
-        const response = await axios.get(`/admin/coupons/list`);
-        return response;
-    }
-);
+export const getCoupon = createAsyncThunk(`customer/getCoupon`, async (id) => {
+    const response = await axios.get(`/admin/coupons/list`);
+    return response;
+});
 export const addtocart = createAsyncThunk(
     `customer/addToCart`,
     async (data) => {
@@ -143,11 +142,15 @@ export const addAdmincategories = createAsyncThunk(
 export const updateAdminCats = createAsyncThunk(
     'admin/updateAdminCats',
     async (data) => {
-        const response = await axios.post(`admin/product-categories/update/${data.id}`, data.data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post(
+            `admin/product-categories/update/${data.id}`,
+            data.data,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
         return response.data;
     }
 );
@@ -155,7 +158,9 @@ export const updateAdminCats = createAsyncThunk(
 export const deleteAdminCats = createAsyncThunk(
     'admin/deleteAdminCats',
     async (data) => {
-        const response = await axios.delete(`admin/product-categories/${data.id}`);
+        const response = await axios.delete(
+            `admin/product-categories/${data.id}`
+        );
         return response.data;
     }
 );
@@ -215,60 +220,46 @@ export const AddCoupons = createAsyncThunk(
     }
 );
 
-export const AddAds = createAsyncThunk(
-    `customer/AddAds`,
-    async (data) => {
-        console.log(data)
-        const response = await axios.post('admin/cms/sections', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+export const AddAds = createAsyncThunk(`customer/AddAds`, async (data) => {
+    console.log(data);
+    const response = await axios.post('admin/cms/sections', data, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
     });
-        return response;
-    }
-);
-
-
-export const getAdsPages = createAsyncThunk(`customer/getAdsPages`, async (id) => {
-    const response = await axios.get(`admin/cms/pages`);
-    return response.data;
+    return response;
 });
 
-export const delAdsPages = createAsyncThunk(`customer/delAdsPages`, async (id) => {
-    const response = await axios.delete(`admin/cms/pages/${id}`);
-    return response.data;
+export const getAdsPages = createAsyncThunk(
+    `customer/getAdsPages`,
+    async (id) => {
+        const response = await axios.get(`admin/cms/pages`);
+        return response.data;
+    }
+);
+
+export const delAdsPages = createAsyncThunk(
+    `customer/delAdsPages`,
+    async (id) => {
+        const response = await axios.delete(`admin/cms/pages/${id}`);
+        return response.data;
+    }
+);
+
+export const AddPgs = createAsyncThunk(`customer/AddPgs`, async (data) => {
+    const response = await axios.post('admin/cms/pages', data);
+    return response;
 });
 
+export const AddSize = createAsyncThunk(`customer/AddSize`, async (data) => {
+    const response = await axios.post('admin/sizes', data);
+    return response;
+});
 
-
-
-
-
-
-export const AddPgs = createAsyncThunk(
-    `customer/AddPgs`,
-    async (data) => {
-        const response = await axios.post('admin/cms/pages', data);
-        return response;
-    }
-);
-
-
-export const AddSize = createAsyncThunk(
-    `customer/AddSize`,
-    async (data) => {
-        const response = await axios.post('admin/sizes', data);
-        return response;
-    }
-);
-
-export const delSize = createAsyncThunk(
-    `customer/delSize`,
-    async (data) => {
-        const response = await axios.delete(`admin/sizes/${data}`);
-        return response;
-    }
-);
+export const delSize = createAsyncThunk(`customer/delSize`, async (data) => {
+    const response = await axios.delete(`admin/sizes/${data}`);
+    return response;
+});
 
 export const favAction = createAsyncThunk(
     `customer/favAction`,
@@ -335,28 +326,19 @@ export const getCategoriesWithProducts = createAsyncThunk(
 // 	}
 // );
 
-export const createLP = createAsyncThunk(
-    `customer/createLP`,
-    async (data) => {
-        const response = await axios.post('admin/loyalty-settings', data);
-        return response;
-    }
-);
+export const createLP = createAsyncThunk(`customer/createLP`, async (data) => {
+    const response = await axios.post('admin/loyalty-settings', data);
+    return response;
+});
 
-export const getLP = createAsyncThunk(
-    `customer/getLP`,
-    async (data) => {
-        const response = await axios.get('admin/loyalty-settings');
-        return response;
-    }
-);
-export const getsizes = createAsyncThunk(
-    'customer/getsizes',
-    async (data) => {
-        const response = await axios.get(`admin/sizes`);
-        return response.data;
-    }
-);
+export const getLP = createAsyncThunk(`customer/getLP`, async (data) => {
+    const response = await axios.get('admin/loyalty-settings');
+    return response;
+});
+export const getsizes = createAsyncThunk('customer/getsizes', async (data) => {
+    const response = await axios.get(`admin/sizes`);
+    return response.data;
+});
 
 const initialState = {
     getadmincarts: {
@@ -524,13 +506,12 @@ export const productSlice = createSlice({
             .addCase(addAdmincategories.fulfilled, (state, { payload }) => {
                 state.addcats.isLoading = false;
                 state.addcats.results = payload;
-
             })
             .addCase(addAdmincategories.rejected, (state) => {
                 state.addcats.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(updateAdminCats.pending, (state) => {
                 state.updatecats.isLoading = true;
             })
@@ -542,7 +523,7 @@ export const productSlice = createSlice({
                 state.updatecats.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(AddSize.pending, (state) => {
                 state.addsize.isLoading = true;
             })
@@ -553,7 +534,7 @@ export const productSlice = createSlice({
             .addCase(AddSize.rejected, (state) => {
                 state.addsize.isLoading = true;
             });
-            builder
+        builder
             .addCase(getsizes.pending, (state) => {
                 state.sizes.isLoading = true;
             })
@@ -564,8 +545,8 @@ export const productSlice = createSlice({
             .addCase(getsizes.rejected, (state) => {
                 state.sizes.isLoading = true;
             });
-        
-            builder
+
+        builder
             .addCase(getAdminProducts.pending, (state) => {
                 state.allproducts.isLoading = true;
             })
@@ -577,7 +558,7 @@ export const productSlice = createSlice({
                 state.allproducts.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(getCoupon.pending, (state) => {
                 state.getcoup.isLoading = true;
             })
@@ -589,7 +570,7 @@ export const productSlice = createSlice({
                 state.getcoup.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(getMetrics.pending, (state) => {
                 state.getmet.isLoading = true;
             })
@@ -646,7 +627,7 @@ export const productSlice = createSlice({
                 state.getcart.isLoading = true;
             });
 
-                    builder
+        builder
             .addCase(getAdsPages.pending, (state) => {
                 state.getadspage.isLoading = true;
             })
@@ -735,7 +716,7 @@ export const productSlice = createSlice({
                 state.getOrder.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(orderHistoryId.pending, (state) => {
                 state.getOrderid.isLoading = true;
             })
@@ -747,22 +728,22 @@ export const productSlice = createSlice({
                 state.getOrderid.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(AddCoupons.pending, (state) => {
                 state.addcoupon.isLoading = true;
             })
             .addCase(AddCoupons.fulfilled, (state, { payload }) => {
                 state.addcoupon.isLoading = false;
                 state.addcoupon.results = payload;
-                if(payload?.data?.code === 200){
-                    toast.success('Coupon added successfully')
+                if (payload?.data?.code === 200) {
+                    toast.success('Coupon added successfully');
                 }
             })
             .addCase(AddCoupons.rejected, (state) => {
                 state.addcoupon.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(AddAds.pending, (state) => {
                 state.addadds.isLoading = true;
             })
@@ -774,8 +755,7 @@ export const productSlice = createSlice({
                 state.addadds.isLoading = true;
             });
 
-
-            builder
+        builder
             .addCase(createLP.pending, (state) => {
                 state.createlp.isLoading = true;
             })
@@ -787,7 +767,7 @@ export const productSlice = createSlice({
                 state.createlp.isLoading = true;
             });
 
-            builder
+        builder
             .addCase(getLP.pending, (state) => {
                 state.getlp.isLoading = true;
             })
@@ -798,8 +778,8 @@ export const productSlice = createSlice({
             .addCase(getLP.rejected, (state) => {
                 state.getlp.isLoading = true;
             });
-            
-            builder
+
+        builder
             .addCase(AddPgs.pending, (state) => {
                 state.addpage.isLoading = true;
             })
@@ -810,8 +790,6 @@ export const productSlice = createSlice({
             .addCase(AddPgs.rejected, (state) => {
                 state.addpage.isLoading = true;
             });
-
-  
 
         builder
             .addCase(favAction.pending, (state) => {

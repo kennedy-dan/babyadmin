@@ -11,7 +11,6 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { Select, ConfigProvider, Modal, Switch } from 'antd';
 import { Dropdown, Menu } from 'antd';
 
-
 import {
     getAdminProducts,
     AddCoupons,
@@ -20,7 +19,7 @@ import {
     UpdateProducts,
     UpdateStat,
     getsizes,
-    delProducts
+    delProducts,
 } from '~/redux/features/productSlice';
 import { toast } from 'react-toastify';
 
@@ -47,8 +46,7 @@ const TableProjectItems = ({ data, dtc }) => {
     const [hoveredImage, setHoveredImage] = useState(null); // State to store hovered image
     const [showImageModal, setShowImageModal] = useState(false); // State to control image modal
 
-    const sizedata = sizes?.results?.data
-
+    const sizedata = sizes?.results?.data;
 
     const [price, setPrice] = useState(null);
     const [stock, setInstock] = useState(null);
@@ -66,7 +64,6 @@ const TableProjectItems = ({ data, dtc }) => {
     useEffect(() => {
         dispatch(getAdmincategories());
         dispatch(getsizes());
-
     }, []);
 
     const handleChange = (value) => {
@@ -75,25 +72,25 @@ const TableProjectItems = ({ data, dtc }) => {
     const openModal = (rowData) => {
         setOPenQr(true);
         setId(rowData?.id);
-        setInstock(rowData?.in_stock)
-        setPrice(rowData?.price)
-        setName(rowData?.name)
-        setDescription(rowData?.description)
-        setSelectedImage(rowData?.image_url)
-        setSelectedOptions(rowData?.product_sizes)
+        setInstock(rowData?.in_stock);
+        setPrice(rowData?.price);
+        setName(rowData?.name);
+        setDescription(rowData?.description);
+        setSelectedImage(rowData?.image_url);
+        setSelectedOptions(rowData?.product_sizes);
     };
     const closeQrModal = () => {
         setOPenQr(false);
     };
 
     const opendelModal = (id) => {
-        setDelMod(true)
-        setdelId(id)
-    }
+        setDelMod(true);
+        setdelId(id);
+    };
 
     const closedelModal = () => {
-        setDelMod(false)
-    }
+        setDelMod(false);
+    };
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -118,7 +115,6 @@ const TableProjectItems = ({ data, dtc }) => {
             console.error('Error converting URL to file:', error);
         }
     };
-
 
     const handleSubmit = async () => {
         let imagefile;
@@ -152,25 +148,22 @@ const TableProjectItems = ({ data, dtc }) => {
         if (selectedImage) {
             data.append('image', imagefile);
         }
-        if(selectedOptions?.length > 0){
-            selectedOptions.forEach(option => {
+        if (selectedOptions?.length > 0) {
+            selectedOptions.forEach((option) => {
                 data.append('sizes[]', option);
             });
         }
-        dispatch(UpdateProducts({ data, id })).then((error) =>{
-            if(error?.payload?.status === 200){
-        toast.success("Product Updated Successfully")
-
+        dispatch(UpdateProducts({ data, id })).then((error) => {
+            if (error?.payload?.status === 200) {
+                toast.success('Product Updated Successfully');
             }
             dispatch(
                 getAdminProducts({
                     page: pge,
                 })
-            )
-}
-        );
+            );
+        });
         setOPenQr(false);
-
     };
 
     const onPage = (event) => {
@@ -199,15 +192,14 @@ const TableProjectItems = ({ data, dtc }) => {
             product_id: rowData.id,
             status: status,
         };
-        dispatch(UpdateStat(data)).then((error) =>{
-            console.log(error)
-            if(error?.payload?.status === 200){
-                    toast.success('Status updated successfully')
-                    console.log('yhhhok')
+        dispatch(UpdateStat(data)).then((error) => {
+            console.log(error);
+            if (error?.payload?.status === 200) {
+                toast.success('Status updated successfully');
+                console.log('yhhhok');
             }
-            dispatch(getAdminProducts({ page: pge }))
-        }
-        );
+            dispatch(getAdminProducts({ page: pge }));
+        });
     };
 
     const handleImageHover = (imageUrl) => {
@@ -222,16 +214,15 @@ const TableProjectItems = ({ data, dtc }) => {
     const deleteCats = () => {
         dispatch(delProducts({ id: delid })).then(() => {
             dispatch(getAdminProducts()).then((error) => {
-                if(error?.payload?.code === 200){
-                    toast.success('Product deleted successfully')
-    
+                if (error?.payload?.code === 200) {
+                    toast.success('Product deleted successfully');
                 }
-            })
-        })
-      }
+            });
+        });
+    };
 
     const menuView = (rowData) => {
-        console.log(rowData)
+        console.log(rowData);
         return (
             <Menu>
                 <Menu.Item key={0}>
@@ -241,14 +232,14 @@ const TableProjectItems = ({ data, dtc }) => {
                     </button>
                 </Menu.Item>
                 <Menu.Item key={0}>
-                    <button onClick={() => opendelModal(rowData.id)} >
+                    <button onClick={() => opendelModal(rowData.id)}>
                         <i className="icon-trash2 mr-2"></i>
                         Delete
                     </button>
                 </Menu.Item>
             </Menu>
         );
-    } 
+    };
 
     let columns = [
         // {
@@ -258,7 +249,7 @@ const TableProjectItems = ({ data, dtc }) => {
         //     body: (rowData, options) => {
         //         return (
         //             <div
-                       
+
         //                 >
         //                 <Image
         //                     width={500}
@@ -273,14 +264,10 @@ const TableProjectItems = ({ data, dtc }) => {
         // },
         {
             field: 'id',
-            header: 'id',
+            header: 'S/N',
             isSort: true,
             body: (rowData, options) => {
-                return (
-                <span >
-                {options.rowIndex + 1}
-                </span>
-                ) 
+                return <span>{options.rowIndex + 1}</span>;
             },
         },
 
@@ -289,7 +276,15 @@ const TableProjectItems = ({ data, dtc }) => {
             header: 'Name',
             isSort: true,
             body: (rowData) => {
-                return <p className='w-fit'  onMouseEnter={() => handleImageHover(rowData.image_url)}>{rowData?.name}</p>;
+                return (
+                    <p
+                        className="w-fit"
+                        onMouseEnter={() =>
+                            handleImageHover(rowData.image_url)
+                        }>
+                        {rowData?.name}
+                    </p>
+                );
             },
         },
         {
@@ -331,21 +326,21 @@ const TableProjectItems = ({ data, dtc }) => {
             },
         },
 
-        
-
         {
             field: 'Action',
             header: 'Action',
             body: (rowData) => {
                 return (
                     <div>
-            <Dropdown overlay={() => menuView(rowData)} className="ps-dropdown">
-            <a
-                onClick={(e) => e.preventDefault()}
-                className="ps-dropdown__toggle">
-                <i className="icon-ellipsis"></i>
-            </a>
-        </Dropdown>
+                        <Dropdown
+                            overlay={() => menuView(rowData)}
+                            className="ps-dropdown">
+                            <a
+                                onClick={(e) => e.preventDefault()}
+                                className="ps-dropdown__toggle">
+                                <i className="icon-ellipsis"></i>
+                            </a>
+                        </Dropdown>
                     </div>
                 );
             },
@@ -408,7 +403,7 @@ const TableProjectItems = ({ data, dtc }) => {
                     alt="Hovered Image"
                     width={500}
                     height={500}
-                    className='w-60 h-60 object-cover'
+                    className="w-60 h-60 object-cover"
                 />
             </Modal>
             <Modal
@@ -419,13 +414,20 @@ const TableProjectItems = ({ data, dtc }) => {
                 onCancel={closedelModal}
                 maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
                 style={{ marginTop: 0 }}>
-                    
-                    <p>Delete Product?</p>
-                    <div className='flex justify-end space-x-4' >
-                        <button className='bg-green-600 rounded-md text-white px-4 py-2' onClick={deleteCats} >Yes</button>
-                        <button className='bg-red-700 rounded-md text-white px-4 py-2' onClick={closedelModal}>No</button>
-                    </div>
-                     </Modal>
+                <p>Delete Product?</p>
+                <div className="flex justify-end space-x-4">
+                    <button
+                        className="bg-green-600 rounded-md text-white px-4 py-2"
+                        onClick={deleteCats}>
+                        Yes
+                    </button>
+                    <button
+                        className="bg-red-700 rounded-md text-white px-4 py-2"
+                        onClick={closedelModal}>
+                        No
+                    </button>
+                </div>
+            </Modal>
             <Modal
                 // title="Print QR"
                 open={openQr}
@@ -444,7 +446,9 @@ const TableProjectItems = ({ data, dtc }) => {
                             <div className="row">
                                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <figure className="ps-block--form-box">
-                                        <figcaption className='text-white' >General</figcaption>
+                                        <figcaption className="text-white">
+                                            General
+                                        </figcaption>
                                         <div className="ps-block__content">
                                             <div className="form-group">
                                                 <label>
@@ -472,7 +476,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                             </div>
                                             <div className="form-group">
                                                 <label>
-                                                     Price<sup>*</sup>
+                                                    Price<sup>*</sup>
                                                 </label>
                                                 <input
                                                     className="form-control"
@@ -484,7 +488,7 @@ const TableProjectItems = ({ data, dtc }) => {
                                                     }
                                                 />
                                             </div>
-                                         
+
                                             <div className="form-group">
                                                 <label>
                                                     Sale Quantity<sup>*</sup>
@@ -522,7 +526,9 @@ const TableProjectItems = ({ data, dtc }) => {
                                 </div>
                                 <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <figure className="ps-block--form-box">
-                                        <figcaption className='text-white' >Product Images</figcaption>
+                                        <figcaption className="text-white">
+                                            Product Images
+                                        </figcaption>
                                         <div className="ps-block__content">
                                             <div className="form-group">
                                                 <label>Product Gallery</label>
@@ -591,38 +597,54 @@ const TableProjectItems = ({ data, dtc }) => {
                                                     />
                                                 </ConfigProvider>
                                             </div>
-                                            <div className='my-8' >
-                                         <ConfigProvider
-                                                theme={{
-                                                    components: {
-                                                        Select: {
-                                                            optionSelectedFontWeight: 600,
+                                            <div className="my-8">
+                                                <ConfigProvider
+                                                    theme={{
+                                                        components: {
+                                                            Select: {
+                                                                optionSelectedFontWeight: 600,
+                                                            },
                                                         },
-                                                    },
-                                                    // ...customTheme,
-                                                    token: {
-                                                        borderRadius: 0,
-                                                        controlHeight: 60,
-                                                        colorBgContainer:
-                                                            '#f0f0f0',
-                                                        fontSize: 16,
-                                                        // optionSelectedFontWeight: 300
-                                                    },
-                                                }}>
-                                            <Select
-                                                mode="multiple"
-                                                placeholder="Select size"
-                                                style={{ width: '100%' }}
-                                                onChange={handleChange}>
-                                                {sizedata?.map(items => <Option value={items?.id}>
-                                                    {items?.size_name}
-                                                </Option>)}
-                                           
-                                            </Select>
-                                            </ConfigProvider>
-                                        </div>
+                                                        // ...customTheme,
+                                                        token: {
+                                                            borderRadius: 0,
+                                                            controlHeight: 60,
+                                                            colorBgContainer:
+                                                                '#f0f0f0',
+                                                            fontSize: 16,
+                                                            // optionSelectedFontWeight: 300
+                                                        },
+                                                    }}>
+                                                    <Select
+                                                        mode="multiple"
+                                                        placeholder="Select size"
+                                                        style={{
+                                                            width: '100%',
+                                                        }}
+                                                        onChange={handleChange}>
+                                                        {sizedata?.map(
+                                                            (items) => (
+                                                                <Option
+                                                                    value={
+                                                                        items?.id
+                                                                    }>
+                                                                    {
+                                                                        items?.size_name
+                                                                    }
+                                                                </Option>
+                                                            )
+                                                        )}
+                                                    </Select>
+                                                </ConfigProvider>
+                                            </div>
                                             <div>
-                                                <Image width={500} height={500} src={selectedImage} alt='' className='w-[200px] h-[200px]' />
+                                                <Image
+                                                    width={500}
+                                                    height={500}
+                                                    src={selectedImage}
+                                                    alt=""
+                                                    className="w-[200px] h-[200px]"
+                                                />
                                             </div>
                                         </div>
                                     </figure>

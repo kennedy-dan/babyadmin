@@ -119,12 +119,16 @@ const TableCategoryItems = () => {
   const deleteCats = () => {
     dispatch(deleteAdminCats({ id: delid })).then(() => {
         dispatch(getAdmincategories()).then((error) => {
+        setDelMod(false)
+
             if(error?.payload?.code === 200){
                 toast.success('Category deleted successfully')
 
             }
         })
     })
+    setDelMod(false)
+
   }
 
     let columns = [

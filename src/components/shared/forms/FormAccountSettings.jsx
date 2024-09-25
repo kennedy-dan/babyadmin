@@ -28,6 +28,8 @@ const FormAccountSettings = () => {
     const [description, setDescription] = useState('');
     const [cats, setCats] = useState(null);
     const [openQr, setOPenQr] = useState(false);
+    const [delMod, setDelMod] = useState(false);
+    const [delid, setdelId] = useState(null);
 
     const [price, setPrice] = useState(null);
     const [stock, setInstock] = useState(null);
@@ -78,6 +80,15 @@ const FormAccountSettings = () => {
         // setId(id);
     };
 
+    const opendelModal = (id) => {
+        setDelMod(true);
+        setdelId(id);
+    };
+
+    const closedelModal = () => {
+        setDelMod(false);
+    };
+
     const closeQrModal = () => {
         setOPenQr(false);
     };
@@ -91,9 +102,12 @@ const FormAccountSettings = () => {
     };
 
     const delSizes = (id) => {
-        dispatch(delSize(id)).then(() => {
+
+        dispatch(delSize(delid)).then(() => {
             dispatch(getsizes());
             toast.success('size deleted successfully ');
+        setDelMod(false);
+
         });
     };
 
@@ -155,6 +169,7 @@ const FormAccountSettings = () => {
             size_name: size,
         };
         dispatch(AddSize(data)).then((error) => {
+            dispatch(getsizes())
             if (error?.payload?.status === 200) {
                 toast.success('Size created successfully');
             }
@@ -345,7 +360,7 @@ const FormAccountSettings = () => {
                             {sizeData?.map((items) => (
                                 <div className="flex items-center justify-between bg-gray-400 rounded-md space-x-3 px-3 py-3 ">
                                     <div>{items?.size_name}</div>
-                                    <div onClick={() => delSizes(items?.id)}>
+                                    <div onClick={() => opendelModal(items?.id)}>
                                         <IoIosClose size={24} />
                                     </div>
                                 </div>
@@ -354,6 +369,28 @@ const FormAccountSettings = () => {
                     </div>
                 </div>
             </div>
+            <Modal
+                // title="Print QR"
+                open={delMod}
+                // onOk={handleOk}
+                footer={false}
+                onCancel={closedelModal}
+                maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+                style={{ marginTop: 0 }}>
+                <p>Delete Size?</p>
+                <div className="flex justify-end space-x-4">
+                    <button
+                        className="bg-green-600 rounded-md text-white px-4 py-2"
+                        onClick={delSizes}>
+                        Yes
+                    </button>
+                    <button
+                        className="bg-red-700 rounded-md text-white px-4 py-2"
+                        onClick={closedelModal}>
+                        No
+                    </button>
+                </div>
+            </Modal>
             <Modal
                 // title="Print QR"
                 open={openQr}
