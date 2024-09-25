@@ -152,6 +152,11 @@ const TableProjectItems = ({ data, dtc }) => {
         if (selectedImage) {
             data.append('image', imagefile);
         }
+        if(selectedOptions?.length > 0){
+            selectedOptions.forEach(option => {
+                data.append('sizes[]', option);
+            });
+        }
         dispatch(UpdateProducts({ data, id })).then((error) =>{
             if(error?.payload?.status === 200){
         toast.success("Product Updated Successfully")
@@ -326,19 +331,7 @@ const TableProjectItems = ({ data, dtc }) => {
             },
         },
 
-        {
-            field: 'Update',
-            header: 'Update',
-            body: (rowData) => {
-                return (
-                    <div>
-                        <button onClick={() => openModal(rowData)}>
-                            Update
-                        </button>
-                    </div>
-                );
-            },
-        },
+        
 
         {
             field: 'Action',
@@ -427,7 +420,7 @@ const TableProjectItems = ({ data, dtc }) => {
                 maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
                 style={{ marginTop: 0 }}>
                     
-                    <p>Deleted Product?</p>
+                    <p>Delete Product?</p>
                     <div className='flex justify-end space-x-4' >
                         <button className='bg-green-600 rounded-md text-white px-4 py-2' onClick={deleteCats} >Yes</button>
                         <button className='bg-red-700 rounded-md text-white px-4 py-2' onClick={closedelModal}>No</button>

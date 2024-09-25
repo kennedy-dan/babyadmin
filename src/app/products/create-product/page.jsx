@@ -126,7 +126,7 @@ const CreateProductPage = () => {
                         <div className="row">
                             <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                 <figure className="ps-block--form-box">
-                                    <figcaption>General</figcaption>
+                                    <figcaption className='text-white'>General</figcaption>
                                     <div className="ps-block__content">
                                         <div className="form-group">
                                             <label>
@@ -201,7 +201,7 @@ const CreateProductPage = () => {
                             </div>
                             <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                 <figure className="ps-block--form-box">
-                                    <figcaption>Product Images</figcaption>
+                                    <figcaption className='text-white'>Product Images</figcaption>
                                     <div className="ps-block__content">
                                         <div className="form-group">
                                             <label>Product Gallery</label>
