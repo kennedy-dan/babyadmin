@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Select, ConfigProvider, Modal, Switch } from 'antd';
 import { Dropdown, Menu } from 'antd';
+import { ClipLoader } from 'react-spinners';
 
 import {
     getAdminProducts,
@@ -26,6 +27,8 @@ import { toast } from 'react-toastify';
 const TableProjectItems = ({ data, dtc }) => {
     const dispatch = useDispatch();
     const customData = data;
+
+
     const [rows, setRows] = useState(15);
     const [openQr, setOPenQr] = useState(false);
     const [id, setId] = useState(null);
@@ -34,11 +37,12 @@ const TableProjectItems = ({ data, dtc }) => {
 
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
-    const { getadmincarts, sizes } = useSelector((state) => state.product);
+    const { getadmincarts, sizes, allproducts } = useSelector((state) => state.product);
     const catsdata = getadmincarts?.results?.data;
     const [selectedOptions, setSelectedOptions] = useState(null);
     // const [id, setId] = useState(null);
     const [delid, setdelId] = useState(null);
+    const [searchValue, setsearchValue] = useState('');
 
     const [cats, setCats] = useState(null);
     const [first, setFirst] = useState(0);
@@ -52,10 +56,27 @@ const TableProjectItems = ({ data, dtc }) => {
     const [stock, setInstock] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    // const [globalFilterValue, setGlobalFilterValue] = useState('');
+    
+    
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+        price: { value: null, matchMode: FilterMatchMode.EQUALS },
+        status: { value: null, matchMode: FilterMatchMode.EQUALS },
     });
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
 
     let searchBar = tableSearchUI(globalFilterValue, (e) =>
         tableSearchFunction(e, filters, setFilters, setGlobalFilterValue)
@@ -116,6 +137,20 @@ const TableProjectItems = ({ data, dtc }) => {
         }
     };
 
+    useEffect(() => {
+        const delaySearch = setTimeout(() => {
+            // if ( searchValue) {
+            console.log(searchValue);
+            dispatch(
+                getAdminProducts({
+                    search: searchValue,
+                })
+            );
+            // }
+        }, 500); // Adjust delay time as needed
+
+        return () => clearTimeout(delaySearch);
+    }, [searchValue]);
     const handleSubmit = async () => {
         let imagefile;
 
@@ -165,7 +200,22 @@ const TableProjectItems = ({ data, dtc }) => {
         });
         setOPenQr(false);
     };
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText
+                        value={globalFilterValue}
+                        onChange={onGlobalFilterChange}
+                        placeholder="Keyword Search"
+                    />
+                </span>
+            </div>
+        );
+    };
 
+    const header = renderHeader();
     const onPage = (event) => {
         setLoading(true);
         setFirst(event.first);
@@ -276,6 +326,8 @@ const TableProjectItems = ({ data, dtc }) => {
         {
             field: 'name',
             header: 'Name',
+    filter: true,
+
             isSort: true,
             body: (rowData) => {
                 return (
@@ -362,39 +414,56 @@ const TableProjectItems = ({ data, dtc }) => {
 
     return (
         <div className="table-responsive">
+                   <div className="flex justify-end my-7">
+                <div>
+                    <input
+                        value={searchValue}
+                        onChange={(e) => setsearchValue(e.target.value)}
+                        className="text-black font-semibold px-4 py-2 rounded-md border-2"
+                        placeholder="Search"
+                    />
+                </div>
+            </div>
+            {allproducts?.isLoading && (
+                <div className="flex justify-enter">
+                    <ClipLoader />
+                </div>
+            )}
+
+{!allproducts?.isLoading && (
             <DataTable
-                value={customData}
-                // loading={reservationHistory?.isLoading}
-                // paginatorF
-                totalRecords={dtc?.pagination_meta?.total}
-                onPage={onPage}
-                first={first}
-                paginator
-                loading={loading}
-                lazy
-                rows={rows}
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                tableStyle={{ minWidth: '30rem' }}
-                style={{ position: 'inherit', fontSize: '16px' }}
-                // header={searchBar}
-                globalFilterFields={[
-                    'name',
-                    'price',
-                    // "reserved_start_time",
-                    // "comment",
-                ]}>
-                {columns.map((col, i) => {
-                    return (
-                        <Column
-                            key={i}
-                            field={col?.field}
-                            header={col?.header}
-                            body={col?.body}
-                            //   headerStyle={{ backgroundColor: '#f0f0f0' }}
-                        />
-                    );
-                })}
-            </DataTable>
+            value={customData}
+            // loading={reservationHistory?.isLoading}
+            // paginatorF
+            totalRecords={dtc?.pagination_meta?.total}
+            onPage={onPage}
+            first={first}
+            paginator
+            loading={loading}
+            lazy
+            rows={rows}
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            tableStyle={{ minWidth: '30rem' }}
+            style={{ position: 'inherit', fontSize: '16px' }}
+            // header={searchBar}
+            header={header}
+            filters={filters}
+            globalFilterFields={['name', 'category', 'price', 'status']}
+            emptyMessage="No products found.">
+            {columns.map((col, i) => {
+                return (
+                    <Column
+                        key={i}
+                        field={col?.field}
+                        header={col?.header}
+                        body={col?.body}
+                        //   headerStyle={{ backgroundColor: '#f0f0f0' }}
+                    />
+                );
+            })}
+        </DataTable>
+            )}
+            
             <Modal
                 open={showImageModal}
                 onCancel={handleImageHoverLeave}

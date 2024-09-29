@@ -1,5 +1,5 @@
 'use client';
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import ModuleOrderShippingInformation from '~/components/partials/orders/ModuleOrderShippingInformation';
 import ModuleOrderBillingInformation from '~/components/partials/orders/ModuleOrderBillingInformation';
@@ -8,28 +8,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'next/navigation';
 import { orderHistoryId } from '~/redux/features/productSlice';
 import Image from 'next/image';
+import { Select, ConfigProvider, Modal, Switch } from 'antd';
 
 const OrderDetailPage = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const params = useParams();
-    const {getOrderid} = useSelector(state => state.product)
-
-
+    const { getOrderid } = useSelector((state) => state.product);
+    const [hoveredImage, setHoveredImage] = useState(null); // State to store hovered image
+    const [showImageModal, setShowImageModal] = useState(false); //
     const { id } = params;
 
     useEffect(() => {
         dispatch(orderHistoryId(id));
     }, [id]);
 
-    const det = getOrderid?.results?.data?.items
+    const det = getOrderid?.results?.data?.items;
 
-    console.log(det)
+    console.log(det);
+
+    const handleImageHover = (imageUrl) => {
+        setHoveredImage(imageUrl);
+        setShowImageModal(true);
+    };
+
+    const handleImageHoverLeave = () => {
+        setShowImageModal(false);
+    };
 
     return (
         <ContainerDefault title="Order Detail">
             <HeaderDashboard
                 title="Order Detail"
-                description="Martfury Order Detail"
+                description="Rbw Order Detail"
             />
             <section className="ps-dashboard">
                 <div className="ps-section__left">
@@ -38,7 +48,7 @@ const OrderDetailPage = () => {
                             <ModuleOrderShippingInformation data={getOrderid} />
                         </div>
                         <div className="col-md-4">
-                            <ModuleOrderBillingInformation data={getOrderid}  />
+                            <ModuleOrderBillingInformation data={getOrderid} />
                         </div>
                         {/* <div className="col-md-4">
                             <ModuleOrderShippingInformation data={getOrderid}  />
@@ -46,48 +56,69 @@ const OrderDetailPage = () => {
                     </div>
                     <div className="ps-card ps-card--track-order">
                         <div className="ps-card__header">
-                            <h4>{getOrderid?.results?.data?.reference}</h4>
+                            <h4>
+                                {' '}
+                                Order Number:{' '}
+                                {getOrderid?.results?.data?.reference}
+                            </h4>
                         </div>
                         <div className="ps-card__content">
                             <div className="table-responsive">
                                 <table className="table ps-table">
                                     <thead>
                                         <tr>
-                                        <th>Image</th>
+                                            <th>Image</th>
 
                                             <th>Product</th>
                                             <th>Quantity</th>
-                                            <th>Price</th>
-                                            <th >Total</th>
+                                            <th className='flex justify-end' >Price</th>
+                                            {/* <th>Total</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {det?.map(item =>   <tr>
-                                        <td>
-                                                <Image width={500} height={500} src={item?.image_url} alt='' className='w-20 h-20' />
-                                                 
-                                                
-                                            </td>
-                                            <td>
-                                                <a href="#">
-                                                 {item?.product_name}
-                                                </a>
-                                            </td>
-                                            <td>
-                                            {item?.quantity}
+                                        {det?.map((item) => (
+                                            <tr>
+                                                <td>
+                                                    <div
+                                                        onMouseEnter={() =>
+                                                            handleImageHover(
+                                                                item?.image_url
+                                                            )
+                                                        }>
+                                                        <Image
+                                                            width={500}
+                                                            height={500}
+                                                            src={
+                                                                item?.image_url
+                                                            }
+                                                            alt=""
+                                                            className="w-20 h-20"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <a href="#">
+                                                        {item?.product_name}
+                                                    </a>
+                                                </td>
+                                                <td>{item?.quantity}</td>
+                                                <td>{item?.unit_price}</td>
+                                                {/* <td>{item?.unit_price}</td> */}
+                                            </tr>
+                                        ))}
 
-                                            </td>
-                                            <td>{item?.unit_price}</td>
-                                            <td>{item?.unit_price}</td>
-                                        </tr>)}
-
-                                      
                                         <tr>
                                             <td colSpan="3">
                                                 <strong>Sub Total:</strong>
                                             </td>
                                             <td>
-                                                <strong>{getOrderid?.results?.data?.payment?.amount}</strong>
+                                                <strong>
+                                                    {
+                                                        getOrderid?.results
+                                                            ?.data?.payment
+                                                            ?.amount
+                                                    }
+                                                </strong>
                                             </td>
                                         </tr>
                                         {/* <tr>
@@ -113,7 +144,13 @@ const OrderDetailPage = () => {
                                                 <strong>Total:</strong>
                                             </td>
                                             <td>
-                                                <strong>{getOrderid?.results?.data?.payment?.amount}</strong>
+                                                <strong>
+                                                    {
+                                                        getOrderid?.results
+                                                            ?.data?.payment
+                                                            ?.amount
+                                                    }
+                                                </strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -187,7 +224,20 @@ const OrderDetailPage = () => {
                     </div> */}
                 </div>
             </section>
+            <Modal
+                open={showImageModal}
+                onCancel={handleImageHoverLeave}
+                width={200}
+                footer={null}>
+                <Image
+                    src={hoveredImage}
+                    alt="Hovered Image"
+                    width={500}
+                    height={500}
+                    className="w-60 h-60 object-cover"
+                />
+            </Modal>
         </ContainerDefault>
     );
 };
-export default OrderDetailPage
+export default OrderDetailPage;

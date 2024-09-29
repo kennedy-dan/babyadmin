@@ -195,7 +195,12 @@ export const verifyPayment = createAsyncThunk(
 export const orderHistory = createAsyncThunk(
     `admin/orderHistory`,
     async (data) => {
-        const response = await axios.get(`admin/orders`);
+        const response = await axios.get(`admin/orders`, {
+            params: {
+                search: data?.search,
+                page: data?.page,
+            },
+        });
         return response;
     }
 );

@@ -81,10 +81,7 @@ const ProductPage = () => {
                 <div className="ps-section__content">
                     <TableProjectItems data={data} dtc={dadtcount} />
                 </div>
-                <div className='grid grid-cols-2 gap-6'>
-                    <p>Coupon code</p>
-                    <p>Discount</p>
-                </div>
+               
                 {/* {coup?.slice().reverse().map(item => (
         <div className='grid grid-cols-2 gap-6' key={item.code}><p>{item.code}</p> <p>{item?.discount}</p> </div>
     ))} */}
