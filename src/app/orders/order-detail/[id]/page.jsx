@@ -71,6 +71,7 @@ const OrderDetailPage = () => {
 
                                             <th>Product</th>
                                             <th>Quantity</th>
+                                            <th>Size</th>
                                             <th className='flex justify-end' >Price</th>
                                             {/* <th>Total</th> */}
                                         </tr>
@@ -102,6 +103,7 @@ const OrderDetailPage = () => {
                                                     </a>
                                                 </td>
                                                 <td>{item?.quantity}</td>
+                                                <td>{item?.product_size?.size_name}</td>
                                                 <td>{item?.unit_price}</td>
                                                 {/* <td>{item?.unit_price}</td> */}
                                             </tr>
@@ -227,14 +229,14 @@ const OrderDetailPage = () => {
             <Modal
                 open={showImageModal}
                 onCancel={handleImageHoverLeave}
-                width={200}
+                width={400}
                 footer={null}>
                 <Image
                     src={hoveredImage}
                     alt="Hovered Image"
-                    width={500}
-                    height={500}
-                    className="w-60 h-60 object-cover"
+                    width={1000}
+                    height={1000}
+                    className="w-[400px] h-[400px] object-cover"
                 />
             </Modal>
         </ContainerDefault>

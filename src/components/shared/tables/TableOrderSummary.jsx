@@ -41,19 +41,16 @@ const TableOrderSummary = () => {
             <tr key={item?.id}>
                 <td>
                 <Link href={`/orders/order-detail/${item?.id}`}>
-               <p className='text-bluue underline' >{item?.id}</p> 
+               <p className='' >{item?.id}</p> 
                 
                 </Link>
                 </td>
-                {/* <td>
-                    <Link href="/orders/order-detail">
-                        {item?.items?.map(info =>
-                        <strong>{info?.product_name}, </strong>
-
-                         )}
-
-                    </Link>
-                </td> */}
+                <td>
+                <Link href={`/orders/order-detail/${item?.id}`}>
+               <p className='text-blue underline' >{item?.reference}</p> 
+                
+                </Link>
+                </td>
                 <td>
                 <Link href={`/orders/order-detail/${item?.id}`}>
 
@@ -78,7 +75,9 @@ const TableOrderSummary = () => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>users name</th>
+                        <th>Order Number</th>
+
+                        <th>Users Name</th>
 
                         <th>Payment</th>
                         {/* <th>Fullfillment</th> */}

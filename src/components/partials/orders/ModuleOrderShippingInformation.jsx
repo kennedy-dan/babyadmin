@@ -10,10 +10,10 @@ const ModuleOrderShippingInformation = ({data}) => {
             <div className="ps-card__content">
                 <h5>{det?.user?.first_name}</h5>
                 <p>
-                    <strong>Address:</strong> 
+                    <strong>Address:{det?.delivery_address?.address}</strong> 
                 </p>
                 <p>
-                    <strong>Phone No.:</strong> 
+                    <strong>Phone No: {det?.delivery_address?.phone}</strong> 
                 </p>
                 <p>
                     <strong>Email:</strong> {det?.user?.email}
