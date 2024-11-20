@@ -10,6 +10,7 @@ import {
     AddProducts,
     UpdateProducts,
     getsizes,
+    getLoca,
 } from '~/redux/features/productSlice';
 import { toast } from 'react-toastify';
 

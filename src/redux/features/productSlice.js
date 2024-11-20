@@ -266,6 +266,11 @@ export const delSize = createAsyncThunk(`customer/delSize`, async (data) => {
     return response;
 });
 
+export const AddLoc = createAsyncThunk(`customer/AddLoc`, async (data) => {
+    const response = await axios.post('admin/delivery-locations', data);
+    return response;
+});
+
 export const favAction = createAsyncThunk(
     `customer/favAction`,
     async (data) => {
@@ -344,9 +349,18 @@ export const getsizes = createAsyncThunk('customer/getsizes', async (data) => {
     const response = await axios.get(`admin/sizes`);
     return response.data;
 });
+export const getstate = createAsyncThunk('customer/getstate', async (data) => {
+    const response = await axios.get(`states`);
+    return response.data;
+});
 
 const initialState = {
     getadmincarts: {
+        results: null,
+        isLoading: true,
+    },
+
+      loc: {
         results: null,
         isLoading: true,
     },
@@ -438,6 +452,10 @@ const initialState = {
         isLoading: false,
         results: null,
     },
+    statess: {
+        isLoading: false,
+        results: null,
+    },
 
     checkout: {
         results: null,
@@ -492,6 +510,31 @@ export const productSlice = createSlice({
     initialState,
 
     extraReducers: (builder) => {
+        builder
+        .addCase(AddLoc.pending, (state) => {
+            state.loc.isLoading = true;
+        })
+        .addCase(AddLoc.fulfilled, (state, { payload }) => {
+            state.loc.isLoading = false;
+            state.loc.results = payload;
+            if(payload.code === 200){
+                toast.success('')
+            }
+        })
+        .addCase(AddLoc.rejected, (state) => {
+            state.loc.isLoading = true;
+        });
+        builder
+        .addCase(getstate.pending, (state) => {
+            state.statess.isLoading = true;
+        })
+        .addCase(getstate.fulfilled, (state, { payload }) => {
+            state.statess.isLoading = false;
+            state.statess.results = payload;
+        })
+        .addCase(getstate.rejected, (state) => {
+            state.statess.isLoading = true;
+        });
         builder
             .addCase(getAdmincategories.pending, (state) => {
                 state.getadmincarts.isLoading = true;
@@ -586,6 +629,8 @@ export const productSlice = createSlice({
             .addCase(getMetrics.rejected, (state) => {
                 state.getmet.isLoading = true;
             });
+
+
 
         //single products
         builder

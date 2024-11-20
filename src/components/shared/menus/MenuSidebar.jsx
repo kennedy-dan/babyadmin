@@ -47,6 +47,11 @@ const MenuSidebar = () => {
             url: '/coupon',
             icon: 'icon-cog',
         },
+        {
+            text: 'Delivery',
+            url: '/delivery',
+            icon: 'icon-cog',
+        },
     ];
 
     return (

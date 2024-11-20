@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./features/authSlice";
 import productSlice from "./features/productSlice";
+import locationSlice from "./features/loationslice";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 import { persistReducer, persistStore } from "redux-persist";
@@ -38,6 +39,7 @@ const persistedReducer = persistReducer(persistConfig, authSlice);
 const rootReducer = combineReducers({
 	auth: persistedReducer,
 	product: productSlice,
+	location: locationSlice
 
 });
 const loggingMiddleware = store => next => action => {

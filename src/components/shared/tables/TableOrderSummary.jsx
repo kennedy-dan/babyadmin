@@ -74,7 +74,7 @@ const TableOrderSummary = () => {
           <table className="table ps-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>S/N</th>
                         <th>Order Number</th>
 
                         <th>Users Name</th>
