@@ -262,6 +262,8 @@ const DeliveryPage = () => {
                 width={800}
                 style={{ height: '', width: '600px' }}
                 open={openTrack}
+        footer={null}
+
                 onCancel={handleTrackClose}>
           <form className="w-full" onSubmit={handleSubmit}>
 
