@@ -8,6 +8,16 @@ export const getLoca = createAsyncThunk(`customer/getLoc`, async (data) => {
     return response.data;
 });
 
+export const delLoca = createAsyncThunk(`customer/delLoca`, async (data) => {
+    const response = await axios.delete(`admin/delivery-locations/${data?.id}`);
+    return response.data;
+});
+
+export const updLoca = createAsyncThunk(`customer/updLoca`, async (data) => {
+    const response = await axios.patch(`admin/delivery-locations/${data?.id}`, data?.data);
+    return response.data;
+});
+
 
 const initialState = {
     getadmincarts: {

@@ -11,17 +11,22 @@ import { toast } from 'react-toastify';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ClipLoader } from 'react-spinners';
+import { Dropdown, Menu } from 'antd';
 
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getstate, AddLoc } from '~/redux/features/productSlice';
-import { getLoca } from '~/redux/features/loationslice';
+import { getLoca, delLoca, updLoca } from '~/redux/features/loationslice';
 const DeliveryPage = () => {
     const [openTrack, setOpenTrack] = useState(false);
+    const [openupTrack, setupOpenTrack] = useState(false);
     const [cities, setCities] = useState(null);
     const [loc, setLoc] = useState(null);
     const {statess} = useSelector(state => state.product)
     const {loca} = useSelector(state => state.location)
+    const [delMod, setDelMod] = useState(false);
+    const [delid, setdelId] = useState(null);
+
     const data = statess?.results?.data
     const dispatch = useDispatch()
 
@@ -53,13 +58,51 @@ const DeliveryPage = () => {
         city_id: '',
         price: '',
     });
+
+    const [upformData, setupFormData] = useState({
+        state_id: '',
+        city_id: '',
+        state: '',
+        city: '',
+        price: '',
+    });
     const handleTrackClose = () => {
         setOpenTrack(false);
     };
     const handleTrackOpen = () => {
         setOpenTrack(true);
-        console.log('yeaaah');
-        // dispatch(getSingleProduct(id));
+    
+        // if (rowData) {
+        //     setFormData({
+        //         state_id: rowData.state?.id || '', // Set the state ID
+        //         city_id: rowData.city?.id || '', // Set the city ID
+        //         price: rowData.price || '', // Set the price
+        //     });
+        // }
+    };
+
+    const handleupTrackClose = () => {
+        setupOpenTrack(false);
+    };
+
+    const handleupTrackOpen = (rowData) => {
+        setupOpenTrack(true);
+    
+        if (rowData) {
+            setupFormData({
+                state_id: rowData.state?.id || '', // Set the state ID
+                city_id: rowData.city?.id || '', // Set the city ID
+                state: rowData.state?.name || '', // Set the state ID
+                city: rowData.city?.name || '', // Set the city ID
+                price: rowData.price || '', // Set the price
+                id: rowData.id
+            });
+        }
+    };
+    console.log(formData.price)
+    const opendelModal = (id) => {
+        setDelMod(true);
+        setdelId(id);
     };
     const customSelectStyles = {
         control: () => ({
@@ -110,10 +153,18 @@ const DeliveryPage = () => {
         });
     }
 
+    function upupdateFormData(e) {
+        const { name, value } = e.target;
+        setupFormData({
+            ...upformData,
+            [name]: value,
+        });
+    }
+
     useEffect(() => {
-        if (formData.state_id) {
+        if (formData.state_id || upformData.state_id) {
             // Find the selected state in the data
-            const selectedState = loc?.find(state => state.id === formData.state_id);
+            const selectedState = loc?.find(state => state.id === formData.state_id || upformData.state_id);
 
             console.log(selectedState)
             
@@ -126,9 +177,25 @@ const DeliveryPage = () => {
         } else {
             setCities(null);
         }
-    }, [formData.state_id, loc]);
+    }, [formData.state_id, loc, upformData.state_id]);
     console.log(formData.state_id)
     console.log(formData.city_id)
+    const closedelModal = () => {
+        setDelMod(false);
+    };
+
+    const deleteCats = () => {
+        dispatch(delLoca({ id: delid })).then(() => {
+            dispatch(getLoca()).then((error) => {
+                if (error?.payload?.code === 200) {
+                    toast.success('Delivery deleted successfully');
+                }
+            });
+        });
+        setDelMod(false);
+
+    };
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -145,7 +212,48 @@ const DeliveryPage = () => {
 
         })
       }
+
+      function handleupSubmit(e) {
+        e.preventDefault();
+
+        if(!upformData.city_id || !upformData.state_id || !upformData.price){
+            return
+        }
+
+        const data = {
+            city_id : upformData.city_id,
+            state_id : upformData.state_id,
+            price : upformData.price,
+        }
+        dispatch(updLoca({id:upformData.id, data:data})).then(() => {
+            toast.success("Location edited successfully")
+            setupOpenTrack(false)
+            dispatch(getLoca())
+
+
+
+        })
+      }
       console.log(customData)
+      const menuView = (rowData) => {
+        console.log(rowData);
+        return (
+            <Menu>
+                <Menu.Item key={0}>
+                    <button onClick={() => handleupTrackOpen(rowData)}>
+                        <i className="icon-pencil mr-2"></i>
+                        Edit
+                    </button>
+                </Menu.Item>
+                <Menu.Item key={0}>
+                    <button onClick={() => opendelModal(rowData.id)}>
+                        <i className="icon-trash2 mr-2"></i>
+                        Delete
+                    </button>
+                </Menu.Item>
+            </Menu>
+        );
+    };
       let columns = [
         {
             field: 'id',
@@ -180,7 +288,7 @@ const DeliveryPage = () => {
             header: 'City',
             isSort: true,
             body: (rowData) => {
-                return <p>{rowData?.city?.city_name}</p>;
+                return <p>{rowData?.city?.name}</p>;
             },
         },
 
@@ -193,10 +301,22 @@ const DeliveryPage = () => {
             },
         },
         {
-            field: 'Actions',
-            header: 'Actions',
-            body: (rowData, index) => {
-                return <p>{rowData?.payment?.amount}</p>;
+            field: 'Action',
+            header: 'Action',
+            body: (rowData) => {
+                return (
+                    <div>
+                        <Dropdown
+                            overlay={() => menuView(rowData)}
+                            className="ps-dropdown">
+                            <a
+                                onClick={(e) => e.preventDefault()}
+                                className="ps-dropdown__toggle">
+                                <i className="icon-ellipsis"></i>
+                            </a>
+                        </Dropdown>
+                    </div>
+                );
             },
         },
     ];
@@ -367,6 +487,142 @@ const DeliveryPage = () => {
                     </button>{' '}
                 </div>
                 </form>
+            </Modal>
+            <Modal
+                width={800}
+                style={{ height: '', width: '600px' }}
+                open={openupTrack}
+        footer={null}
+
+                onCancel={handleupTrackClose}>
+          <form className="w-full" onSubmit={handleupSubmit}>
+
+                <div>
+                    <p className="text-center font-semibold text-[18px]">
+                        Update Location
+                    </p>
+                    <div>
+                        <p className="mt-5">State</p>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Select: {
+                                        optionSelectedFontWeight: 600,
+                                    },
+                                },
+                                // ...customTheme,
+                                token: {
+                                    borderRadius: 7,
+                                    controlHeight: 60,
+                                    colorBgContainer: '#f0f0f0',
+                                    fontSize: 16,
+                                    // optionSelectedFontWeight: 300
+                                },
+                            }}>
+                            <Select
+                                styles={customSelectStyles}
+                                id="state"
+                                placeholder="State"
+                                className={` w-full`}
+                                defaultValue={upformData.state || ''}
+                                showSearch
+                                // value={upformData.state || ''} // Bind to formData.state_id
+
+                                options={loc?.map((location) => ({
+                                    value: location.id,
+                                    label: location.name,
+                                }))}
+                                onChange={(e) =>
+                                    setupFormData({
+                                        ...upformData,
+                                        state_id: e || '',
+                                    })
+                                }
+                                isClearable
+                                classNamePrefix="react-select"
+                            />
+                        </ConfigProvider>
+                    </div>
+                    <div className="mt-5">
+                        <p>City</p>
+                        <ConfigProvider
+                            theme={{
+                                components: {
+                                    Select: {
+                                        optionSelectedFontWeight: 600,
+                                    },
+                                },
+                                // ...customTheme,
+                                token: {
+                                    borderRadius: 7,
+                                    controlHeight: 60,
+                                    colorBgContainer: '#f0f0f0',
+                                    fontSize: 16,
+                                    // optionSelectedFontWeight: 300
+                                },
+                            }}>
+                            <Select
+                                styles={customSelectStyles}
+                                id="city"
+                                placeholder="City"
+                                defaultValue={upformData.city || undefined} // Bind to formData.state_id
+                                showSearch
+                                className={` w-full `}
+                                options={cities?.map((city) => ({
+                                    value: city?.id,
+                                    label: city?.city_name,
+                                }))}
+                                onChange={(e) =>
+                                    setupFormData({
+                                        ...upformData,
+                                        city_id: e || '',
+                                    })
+                                }
+                                isClearable
+                                isDisabled={formData.state_id === ''}
+                                classNamePrefix="react-select"
+                            />
+                        </ConfigProvider>
+                    </div>
+
+                    <p className="mt-5">Price</p>
+                    <input
+                        type="text"
+                        placeholder="Price"
+                        name="price"
+                        value={upformData.price}
+                        onChange={upupdateFormData}
+                        className="text-[16px] outline-none border border-1 border-gray-500 rounded-sm px-2 py-3 w-full"
+                    />
+                </div>
+                <div className="flex justify-center mt-5" >
+                    <button className="bg-[#003057] text-white px-3 py-2 ">
+                        Update Location
+                    </button>{' '}
+                </div>
+                </form>
+            </Modal>
+            <Modal
+                // title="Print QR"
+                open={delMod}
+                // onOk={handleOk}
+                footer={false}
+                onCancel={closedelModal}
+                maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+                style={{ marginTop: 0 }}>
+                <p>Delete Location?</p>
+                <div className="flex justify-end space-x-4">
+                    <button
+                        className="bg-green-600 rounded-md text-white px-4 py-2"
+                        onClick={deleteCats}>
+                        Yes
+                    </button>
+                    <button
+                        className="bg-red-700 rounded-md text-white px-4 py-2"
+                        onClick={closedelModal}>
+                        No
+                    </button>
+                </div>
             </Modal>
         </ContainerDefault>
     );
